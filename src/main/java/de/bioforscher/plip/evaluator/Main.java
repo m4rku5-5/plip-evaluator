@@ -40,9 +40,10 @@ public class Main {
                 System.out.println(group);
                 System.out.println(secondaryStructure.getSecondaryStructure());
                 System.out.println(plipInteractionContainer.getHydrogenBonds());
+                System.out.println();
 
                 for (HydrogenBond hydrogenBond : plipInteractionContainer.getHydrogenBonds()) {
-                    
+
                 }
             }
         }
