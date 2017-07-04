@@ -12,5 +12,11 @@ public class Protein {
         this.chain = chain;
         this.interactions = interactions;
     }
+
+    public Protein(String PDBid, String chain, Interaction[] interactions) {
+        this.PDBid = PDBid;
+        this.chain = chain;
+        this.interactions = interactions;
+    }
 }
 

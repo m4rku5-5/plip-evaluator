@@ -52,6 +52,8 @@ public class PLIPEvaluator {
     }
 
     public static void test(){
-        new Literature().makeJson();
+
+        Interaction[] interactions = {new Interaction(1,3,5,"H-Bond")};
+        new JsonHandler().makeJson("bla", "C", interactions);
     }
 }
