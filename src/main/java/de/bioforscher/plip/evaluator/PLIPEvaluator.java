@@ -12,12 +12,14 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.parser.ProteinParser;
 
-/**
- * Created by markus on 29.06.17.
- */
-public class Main {
+
+public class PLIPEvaluator {
     public static void main(String[] args) {
-        process("1aki");
+        //process("1aki");
+        test();
+
+
+
     }
 
     private static void process(String pdbID) {
@@ -25,7 +27,7 @@ public class Main {
 
         // annotate the features
         new DictionaryOfProteinSecondaryStructure().process(protein);
-        new PLIPAnnotator().process(protein);
+        //new PLIPAnnotator().process(protein);
 
         // traverse all amino acids of the protein
         for(Chain chain : protein.getChains()) {
@@ -35,17 +37,21 @@ public class Main {
                 }
 
                 GenericSecondaryStructure secondaryStructure = group.getFeatureContainer().getFeature(GenericSecondaryStructure.class);
-                PLIPInteractionContainer plipInteractionContainer = group.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
+               // PLIPInteractionContainer plipInteractionContainer = group.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
 
                 System.out.println(group);
                 System.out.println(secondaryStructure.getSecondaryStructure());
-                System.out.println(plipInteractionContainer.getHydrogenBonds());
+                //System.out.println(plipInteractionContainer.getHydrogenBonds());
                 System.out.println();
 
-                for (HydrogenBond hydrogenBond : plipInteractionContainer.getHydrogenBonds()) {
+                //for (HydrogenBond hydrogenBond : plipInteractionContainer.getHydrogenBonds()) {
 
-                }
+               //}
             }
         }
+    }
+
+    public static void test(){
+        new Literature().makeJson();
     }
 }
