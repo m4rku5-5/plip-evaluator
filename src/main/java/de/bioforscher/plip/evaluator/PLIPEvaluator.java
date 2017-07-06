@@ -12,6 +12,8 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.parser.ProteinParser;
 
+import java.util.TimeZone;
+
 
 public class PLIPEvaluator {
     public static void main(String[] args) {
@@ -53,7 +55,9 @@ public class PLIPEvaluator {
 
     public static void test(){
 
-        Interaction[] interactions = {new Interaction(1,3,5,"H-Bond")};
-        new JsonHandler().makeJson("bla", "C", interactions);
+        //Interaction[] interactions = {new Interaction(1,3,5,"H-Bond")};
+        //new JsonExporter().makeJson("bla", "C", interactions);
+
+
     }
 }

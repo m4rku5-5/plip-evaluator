@@ -32,15 +32,15 @@
       <TableView editable="true" layoutX="265.0" layoutY="60.0" prefHeight="211.0" prefWidth="348.0">
         <columns>
           <TableColumn prefWidth="96.0" text="ResidueNumber" />
-            <cellValueFactory><PropertyValueFactory property="firstName" />
-            </cellValueFactory>
+            <!--<cellValueFactory><PropertyValueFactory property="firstName" />-->
+            <!--</cellValueFactory>-->
           <TableColumn prefWidth="57.0" text="Aceptor" />
             <TableColumn prefWidth="43.0" text="Donor" />
             <TableColumn prefWidth="104.0" text="InteractionType" />
         </columns>
           <items>
               <FXCollections fx:factory="observableArrayList">
-                  <Interaction resediuNumber="" />
+                  <!--<Interaction resediuNumber="" />-->
               </FXCollections>
           </items>
          <columnResizePolicy>
