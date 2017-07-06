@@ -55,8 +55,15 @@ public class PLIPEvaluator {
 
     public static void test(){
 
-        //Interaction[] interactions = {new Interaction(1,3,5,"H-Bond")};
-        //new JsonExporter().makeJson("bla", "C", interactions);
+        Interaction[] interactions = {new Interaction(1,3,5,3,"H-Bond"), new Interaction(1,3,7,5,"H-Bond")};
+        de.bioforscher.plip.evaluator.Protein protein = new de.bioforscher.plip.evaluator.Protein("xyzz:34","4blu","D",interactions);
+
+        HibernateHandler handler = new HibernateHandler();
+        handler.storeProtein(protein);
+
+        de.bioforscher.plip.evaluator.Protein loaded = handler.fetchProtein("4blu");
+        System.out.println(loaded.getPDBid());
+
 
 
     }

@@ -2,13 +2,10 @@ package de.bioforscher.plip.evaluator;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import java.io.Serializable;
 
-@Entity
-public class Interaction {
+public class Interaction implements Serializable{
 
-    @Id
     private int id;
     private String type;
     private int residueNumber;
@@ -16,10 +13,6 @@ public class Interaction {
     private int aceptor;
 
 
-/*    private final SimpleStringProperty residueNumberFX = new SimpleStringProperty("");
-    private final SimpleStringProperty donorFX = new SimpleStringProperty("");
-    private final SimpleStringProperty aceptorFX = new SimpleStringProperty("");
-    private final SimpleStringProperty typeFX = new SimpleStringProperty("");*/
 
 
     public Interaction(int id, int residueNumber, int donor, int aceptor, String type){
@@ -29,6 +22,56 @@ public class Interaction {
         this.type = type;
         this.id = id;
     }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getResidueNumber() {
+        return residueNumber;
+    }
+
+    public void setResidueNumber(int residueNumber) {
+        this.residueNumber = residueNumber;
+    }
+
+    public int getDonor() {
+        return donor;
+    }
+
+    public void setDonor(int donor) {
+        this.donor = donor;
+    }
+
+    public int getAceptor() {
+        return aceptor;
+    }
+
+    public void setAceptor(int aceptor) {
+        this.aceptor = aceptor;
+    }
+
+
+    // JavaFX Stuff <------------------------------------------------------------------------------
+
+
+        /*    private final SimpleStringProperty residueNumberFX = new SimpleStringProperty("");
+    private final SimpleStringProperty donorFX = new SimpleStringProperty("");
+    private final SimpleStringProperty aceptorFX = new SimpleStringProperty("");
+    private final SimpleStringProperty typeFX = new SimpleStringProperty("");*/
 
     /*public Interaction(String residueNumber, String donor, String aceptor, String type){
         setResidueNumberFX(residueNumber);
@@ -56,4 +99,6 @@ public class Interaction {
     public void setTypeFX(String typeFX) {
         this.typeFX.set(typeFX);
     }*/
+
+
 }
