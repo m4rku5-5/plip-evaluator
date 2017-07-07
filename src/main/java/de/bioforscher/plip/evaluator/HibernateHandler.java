@@ -9,6 +9,20 @@ import org.hibernate.internal.util.SerializationHelper;
 
 public class HibernateHandler {
 
+    private Configuration con;
+    private SessionFactory sf;
+    private Session session;
+
+    public void openSession(){
+
+        con = new Configuration().configure().addAnnotatedClass(Protein.class);
+
+        sf = con.buildSessionFactory();
+
+        session = sf.openSession();
+    }
+
+
     public void storeProtein(Protein protein){
 
         Interaction[] interactionsArray = protein.getInteractions();
@@ -17,30 +31,15 @@ public class HibernateHandler {
         Protein prot = protein;
         prot.setInteractionsByte(interactions);
 
-        Configuration con = new Configuration().configure().addAnnotatedClass(Protein.class);
-
-        SessionFactory sf = con.buildSessionFactory();
-
-        Session session = sf.openSession();
-
         Transaction ta = session.beginTransaction();
 
         session.save(prot);
 
         ta.commit();
-        session.close();
-        sf.close();
-
     }
 
 
     public Protein fetchProtein(String PDBid){
-
-        Configuration con = new Configuration().configure().addAnnotatedClass(Protein.class);
-
-        SessionFactory sf = con.buildSessionFactory();
-
-        Session session = sf.openSession();
 
         Transaction ta = session.beginTransaction();
 
@@ -51,10 +50,12 @@ public class HibernateHandler {
         fetchedProtein.setInteractions(fetchedInteractions);
 
         ta.commit();
-        session.close();
-        sf.close();
 
         return fetchedProtein;
     }
 
+    public void closeSession(){
+        session.close();
+        sf.close();
+    }
 }
