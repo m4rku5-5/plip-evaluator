@@ -6,6 +6,9 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.internal.util.SerializationHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class HibernateHandler {
 
@@ -33,7 +36,7 @@ public class HibernateHandler {
 
         Transaction ta = session.beginTransaction();
 
-        session.save(prot);
+        session.saveOrUpdate(prot);
 
         ta.commit();
     }
@@ -52,6 +55,28 @@ public class HibernateHandler {
         ta.commit();
 
         return fetchedProtein;
+    }
+
+    public List<Protein> fetchAllProteins(){
+
+        Transaction ta = session.beginTransaction();
+
+        List<Protein> fetchedProteinList = session.createCriteria(Protein.class).list();
+
+        ta.commit();
+
+        int size = fetchedProteinList.size();
+
+        List<Protein> ProteinList = new ArrayList<Protein>();
+
+        for (int i = 0; i < size; i++) {
+            Protein currentProt = fetchedProteinList.get(i);
+            Interaction[] interactions = (Interaction[]) SerializationHelper.deserialize(currentProt.getInteractionsByte());
+            Protein newProtein = new Protein(currentProt.getDoi(),currentProt.getPDBid(),currentProt.getChain(),interactions);
+            ProteinList.add(newProtein);
+        }
+
+        return ProteinList;
     }
 
     public void closeSession(){

@@ -3,18 +3,38 @@ package de.bioforscher.plip.evaluator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
 
 public class JsonExporter {
 
-
-
-    /*public void makeJson(String doi, String PDBid, String chain, Interaction[] interactions){
+    public void exportDBAsJson(){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Protein protein = new Protein(doi, PDBid, chain, interactions);
 
-        String str = gson.toJson(protein);
-        System.out.println(str);
-    }*/
+        HibernateHandler handler = new HibernateHandler();
+
+        handler.openSession();
+
+        List<Protein> proteinList =  handler.fetchAllProteins();
+
+        handler.closeSession();
+
+        String str = gson.toJson(proteinList);
+        //System.out.println(str);
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("DBexport.json"));
+            writer.write(str);
+            writer.close();
+            System.out.println("DB successfully written.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
 }
