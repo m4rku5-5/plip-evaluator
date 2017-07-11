@@ -6,31 +6,22 @@ import java.io.Serializable;
 
 public class Interaction implements Serializable{
 
-    private int id;
     private String type;
     private int residueNumber;
     private int donor;
     private int aceptor;
 
 
+    //TODO specify and check interaction types
 
 
-    public Interaction(int id, int residueNumber, int donor, int aceptor, String type){
+    public Interaction(int residueNumber, int donor, int aceptor, String type){
         this.residueNumber = residueNumber;
         this.donor = donor;
         this.aceptor = aceptor;
         this.type = type;
-        this.id = id;
     }
 
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getType() {
         return type;

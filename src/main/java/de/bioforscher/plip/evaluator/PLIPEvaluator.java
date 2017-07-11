@@ -68,8 +68,8 @@ public class PLIPEvaluator {
 //
 //        handler.closeSession();
 
-          JsonExporter exporter = new JsonExporter();
-          exporter.exportDBAsJson();
+          new JsonExporter().exportDBAsJson();
+
 
     }
 }

@@ -1,9 +1,7 @@
 package de.bioforscher.plip.evaluator;
 
 
-
-
-public class Literature implements EvaluatorModule{
+class Literature implements EvaluatorModule{
 
 
 
