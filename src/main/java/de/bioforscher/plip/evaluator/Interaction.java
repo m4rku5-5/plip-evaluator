@@ -8,17 +8,21 @@ public class Interaction implements Serializable{
 
     private String type;
     private int residueNumber;
-    private int donor;
-    private int aceptor;
+    private int donor1;
+    private int donor2;
+    private int accept1;
+    private int accept2;
 
 
     //TODO specify and check interaction types
 
 
-    public Interaction(int residueNumber, int donor, int aceptor, String type){
+    public Interaction(int residueNumber, int accept1, int accept2, int donor1, int donor2, String type){
         this.residueNumber = residueNumber;
-        this.donor = donor;
-        this.aceptor = aceptor;
+        this.donor1 = donor1;
+        this.donor2 = donor2;
+        this.accept1 = accept1;
+        this.accept2 = accept2;
         this.type = type;
     }
 
@@ -39,57 +43,37 @@ public class Interaction implements Serializable{
         this.residueNumber = residueNumber;
     }
 
-    public int getDonor() {
-        return donor;
+    public int getDonor1() {
+        return donor1;
     }
 
-    public void setDonor(int donor) {
-        this.donor = donor;
+    public void setDonor1(int donor1) {
+        this.donor1 = donor1;
     }
 
-    public int getAceptor() {
-        return aceptor;
+    public int getDonor2() {
+        return donor2;
     }
 
-    public void setAceptor(int aceptor) {
-        this.aceptor = aceptor;
+    public void setDonor2(int donor2) {
+        this.donor2 = donor2;
     }
 
-
-    // JavaFX Stuff <------------------------------------------------------------------------------
-
-
-        /*    private final SimpleStringProperty residueNumberFX = new SimpleStringProperty("");
-    private final SimpleStringProperty donorFX = new SimpleStringProperty("");
-    private final SimpleStringProperty aceptorFX = new SimpleStringProperty("");
-    private final SimpleStringProperty typeFX = new SimpleStringProperty("");*/
-
-    /*public Interaction(String residueNumber, String donor, String aceptor, String type){
-        setResidueNumberFX(residueNumber);
-        setDonorFX(donor);
-        setAceptorFX(aceptor);
-        setTypeFX(type);
+    public int getAccept1() {
+        return accept1;
     }
 
-    public Interaction(){
-        this("","","","");
+    public void setAccept1(int accept1) {
+        this.accept1 = accept1;
     }
 
-    public void setResidueNumberFX(String residueNumberFX) {
-        this.residueNumberFX.set(residueNumberFX);
+    public int getAccept2() {
+        return accept2;
     }
 
-    public void setDonorFX(String donorFX) {
-        this.donorFX.set(donorFX);
+    public void setAccept2(int accept2) {
+        this.accept2 = accept2;
     }
-
-    public void setAceptorFX(String aceptorFX) {
-        this.aceptorFX.set(aceptorFX);
-    }
-
-    public void setTypeFX(String typeFX) {
-        this.typeFX.set(typeFX);
-    }*/
 
 
 }

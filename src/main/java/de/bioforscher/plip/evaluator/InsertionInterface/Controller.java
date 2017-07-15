@@ -33,7 +33,7 @@ public class Controller {
 
     //TODO specify interaction types
 
-    @FXML
+/*    @FXML
     protected void addInteractionToTable() {
 //        if (type.getText() == "H-Bond"){
 //            System.err.println("Type must be H-Bond, ::::::::::::::::::::::::::::::::::::");
@@ -45,7 +45,7 @@ public class Controller {
             tableView.getItems().add(new Interaction(Integer.valueOf(residueNumber.getText()) , Integer.valueOf(donor.getText()), Integer.valueOf(aceptor.getText()), type.getText()));
         }
 
-    }
+    }*/
 
 
     @FXML
@@ -55,7 +55,11 @@ public class Controller {
         String chainText = chain.getText();
 
 
-        //Interaction[] interactions = tableView.getItems().toArray();
+        //Interaction[] interactions = new Interaction[tableView.getItems().size()];
+        //interactions = tableView.getItems().toArray();
+
+
+
         //System.out.println(interactions[0].getResidueNumber());
 
         Protein protein = new Protein();

@@ -55,21 +55,17 @@ public class PLIPEvaluator {
 
     public static void test(){
 
-//        Interaction[] interactions = {new Interaction(1,3,5,3,"H-Bond"), new Interaction(3,3,7,5,"H-Bond")};
-//        de.bioforscher.plip.evaluator.Protein protein = new de.bioforscher.plip.evaluator.Protein("xyzz:34","5blb","E",interactions);
-//
-//        HibernateHandler handler = new HibernateHandler();
-//
-//        handler.openSession();
-//        handler.storeProtein(protein);
-//
-//        de.bioforscher.plip.evaluator.Protein loaded = handler.fetchProtein("4blu");
-//        System.out.println(loaded.getDoi());
-//
-//        handler.closeSession();
 
-          new JsonExporter().exportDBAsJson();
+        de.bioforscher.plip.evaluator.Protein protein = new DSSP().processPDBidDSSP("1aki");
+        de.bioforscher.plip.evaluator.Protein protein1 = new DSSP().processPDBidDSSP("1pqs");
 
+        HibernateHandler handler = new HibernateHandler();
+        handler.openSession();
+        handler.storeProtein(protein);
+        handler.storeProtein(protein1);
+        handler.closeSession();
+
+        new JsonExporter().exportDBAsJson();
 
     }
 }
