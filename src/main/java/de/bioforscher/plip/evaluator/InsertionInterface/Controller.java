@@ -1,7 +1,7 @@
 package de.bioforscher.plip.evaluator.InsertionInterface;
 
 import de.bioforscher.plip.evaluator.HibernateHandler;
-import de.bioforscher.plip.evaluator.Interaction;
+//import de.bioforscher.plip.evaluator.Interaction;
 import de.bioforscher.plip.evaluator.Protein;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;

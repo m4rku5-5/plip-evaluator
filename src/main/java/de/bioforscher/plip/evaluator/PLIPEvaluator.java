@@ -3,6 +3,8 @@ package de.bioforscher.plip.evaluator;
 import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
+import de.bioforscher.jstructure.feature.sse.assp.ASSPSecondaryStructure;
+import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -11,10 +13,15 @@ import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 
+/**
+ * central evaluator
+ * --> currently only test functions
+ */
+
 public class PLIPEvaluator {
     public static void main(String[] args) {
-        process("1pqs");
-        //test();
+        //process("1aki");
+        test();
 
 
 
@@ -24,7 +31,7 @@ public class PLIPEvaluator {
         Structure protein = StructureParser.source(pdbID).parse();
 
         // annotate the features
-        //new DictionaryOfProteinSecondaryStructure().process(protein);
+        new DictionaryOfProteinSecondaryStructure().process(protein);
         new PLIPAnnotator().process(protein);
 
         // traverse all amino acids of the protein
@@ -34,12 +41,14 @@ public class PLIPEvaluator {
                     continue;
                 }
 
-                //GenericSecondaryStructure secondaryStructure = group.getFeatureContainer().getFeature(GenericSecondaryStructure.class);
+                DSSPSecondaryStructure secondaryStructure = group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
                 PLIPInteractionContainer plipInteractionContainer = group.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
 
                 System.out.println(group);
-                //System.out.println(secondaryStructure.getSecondaryStructure());
                 System.out.println(plipInteractionContainer.getHydrogenBonds());
+                if(!plipInteractionContainer.getHydrogenBonds().isEmpty()){
+                System.out.print(plipInteractionContainer.getHydrogenBonds().get(0).getAcceptor().getParentGroup().getResidueIdentifier().getResidueNumber() + " ");
+                System.out.println(plipInteractionContainer.getHydrogenBonds().get(0).getDonor().getParentGroup().getResidueIdentifier().getResidueNumber());}
                 System.out.println();
 
                 //for (HydrogenBond hydrogenBond : plipInteractionContainer.getHydrogenBonds()) {
@@ -52,8 +61,6 @@ public class PLIPEvaluator {
     public static void test(){
 
 
-        de.bioforscher.plip.evaluator.Protein protein = new DSSP().processPDBidDSSP("1aki");
-        de.bioforscher.plip.evaluator.Protein protein1 = new DSSP().processPDBidDSSP("1pqs");
 
 
     }

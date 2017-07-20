@@ -9,6 +9,10 @@ import org.hibernate.internal.util.SerializationHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * handling of storage of proteins in a database
+ */
+
 
 public class HibernateHandler {
 
@@ -18,6 +22,7 @@ public class HibernateHandler {
 
     public void openSession(){
 
+        //loading configuration file
         con = new Configuration().configure().addAnnotatedClass(Protein.class);
 
         sf = con.buildSessionFactory();
@@ -28,11 +33,12 @@ public class HibernateHandler {
 
     public void storeProtein(Protein protein){
 
-        Interaction[] interactionsArray = protein.getInteractions();
-        byte[] interactions = SerializationHelper.serialize(interactionsArray);
+        //make new container
+        InteractionContainer interactionContainer = protein.getInteractionContainer();
+        byte[] interactionContainerByte = SerializationHelper.serialize(interactionContainer);
 
         Protein prot = protein;
-        prot.setInteractionsByte(interactions);
+        prot.setInteractionContainerByte(interactionContainerByte);
 
         Transaction ta = session.beginTransaction();
 
@@ -48,9 +54,9 @@ public class HibernateHandler {
 
         Protein fetchedProtein = session.get(Protein.class, PDBid);
 
-        Interaction[] fetchedInteractions = (Interaction[]) SerializationHelper.deserialize(fetchedProtein.getInteractionsByte());
+        InteractionContainer fetchedInteractions = (InteractionContainer) SerializationHelper.deserialize(fetchedProtein.getInteractionContainerByte());
 
-        fetchedProtein.setInteractions(fetchedInteractions);
+        fetchedProtein.setInteractionContainer(fetchedInteractions);
 
         ta.commit();
 
@@ -71,8 +77,8 @@ public class HibernateHandler {
 
         for (int i = 0; i < size; i++) {
             Protein currentProt = fetchedProteinList.get(i);
-            Interaction[] interactions = (Interaction[]) SerializationHelper.deserialize(currentProt.getInteractionsByte());
-            Protein newProtein = new Protein(currentProt.getDoi(),currentProt.getPDBid(),currentProt.getChain(),interactions);
+            InteractionContainer interactionContainer = (InteractionContainer) SerializationHelper.deserialize(currentProt.getInteractionContainerByte());
+            Protein newProtein = new Protein(currentProt.getDoi(),currentProt.getPDBid(),currentProt.getChain(),interactionContainer);
             ProteinList.add(newProtein);
         }
 
@@ -83,4 +89,5 @@ public class HibernateHandler {
         session.close();
         sf.close();
     }
+
 }

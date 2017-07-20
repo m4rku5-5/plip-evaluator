@@ -3,6 +3,7 @@ package de.bioforscher.plip.evaluator;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -12,39 +13,44 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * PLIP module
+ */
+
 class PLIP implements EvaluatorModule {
 
     public Protein processPDBidPLIP(String PDBid){
+
+        //make new structure and process with DSSP
         Structure protein = StructureParser.source(PDBid).parse();
         new PLIPAnnotator().process(protein);
 
-        List<Interaction> interactionsList = new ArrayList<Interaction>();
+        List<HBondInteraction> hBondInteractions = new ArrayList<HBondInteraction>();
 
+        //traverse over all amino acids
         for(Chain chain : protein.getChains()) {
             for (Group group : chain.getGroups()) {
-                if(!(group instanceof AminoAcid)) {
+                if (!(group instanceof AminoAcid)) {
                     continue;
                 }
 
-                PLIPInteractionContainer secondaryStructurePLIP = group.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
+                PLIPInteractionContainer plipInteractionContainer = group.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
 
-                Interaction interaction = new Interaction(group.getResidueIdentifier().getResidueNumber(), 0, 0, 0, 0, "H-Bond");
-
-
-                //interactionsList.add(interaction);
-
+                if(!plipInteractionContainer.getHydrogenBonds().isEmpty()){
+                    for (int i = 0; i < plipInteractionContainer.getHydrogenBonds().size(); i++) {
+                        hBondInteractions.add(new HBondInteraction(group.getResidueIdentifier().getResidueNumber(),plipInteractionContainer.getHydrogenBonds().get(i).getDonor().getParentGroup().getResidueIdentifier().getResidueNumber(),plipInteractionContainer.getHydrogenBonds().get(i).getAcceptor().getParentGroup().getResidueIdentifier().getResidueNumber()));
+                    }
+                }
             }
         }
 
-        Interaction[] interactions = new Interaction[interactionsList.size()];
-        interactions = interactionsList.toArray(interactions);
+        // add interactions to container
+        InteractionContainer interactionContainer = new InteractionContainer(hBondInteractions);
 
-        Protein returnProtein = new Protein("", protein.getProteinIdentifier().getPdbId(), "all", interactions);
-
+        //make a protein to return
+        Protein returnProtein = new Protein("", protein.getProteinIdentifier().getPdbId(), "all", interactionContainer);
 
         return returnProtein;
-
-
     }
 
 

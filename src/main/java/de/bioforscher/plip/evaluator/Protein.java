@@ -5,41 +5,36 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
 
+/**
+ * protein object representation
+ */
+
 @Entity
 public class Protein implements Serializable{
 
-    @Id
+   @Id
     private String PDBid;
     private String chain;
-    private byte[] interactionsByte;
-
-    @Transient
-    private Interaction[] interactions;
+    private byte[] interactionContainerByte;
     private String doi;
 
+    @Transient
+    private InteractionContainer interactionContainer;
 
-    public Protein(String doi, String PDBid, String chain, Interaction[] interactions) {
+
+
+    public Protein(String doi, String PDBid, String chain, InteractionContainer interactionContainer) {
         this.doi = doi;
         this.PDBid = PDBid;
         this.chain = chain;
-        this.interactions = interactions;
+        this.interactionContainer = interactionContainer;
     }
 
-    public Protein(String doi, String PDBid, String chain, byte[] interactions) {
+    public Protein(String doi, String PDBid, String chain, byte[] interactionContainerByte) {
         this.doi = doi;
         this.PDBid = PDBid;
         this.chain = chain;
-        this.interactionsByte = interactions;
-    }
-
-    public Protein(){}
-
-    public String getDoi() {
-        return doi;
-    }
-
-    public void setDoi(String doi) {
-        this.doi = doi;
+        this.interactionContainerByte = interactionContainerByte;
     }
 
     public String getPDBid() {
@@ -58,20 +53,28 @@ public class Protein implements Serializable{
         this.chain = chain;
     }
 
-    public Interaction[] getInteractions() {
-        return interactions;
+    public byte[] getInteractionContainerByte() {
+        return interactionContainerByte;
     }
 
-    public void setInteractions(Interaction[] interactions) {
-        this.interactions = interactions;
+    public void setInteractionContainerByte(byte[] interactionContainerByte) {
+        this.interactionContainerByte = interactionContainerByte;
     }
 
-    public byte[] getInteractionsByte() {
-        return interactionsByte;
+    public String getDoi() {
+        return doi;
     }
 
-    public void setInteractionsByte(byte[] interactionsByte) {
-        this.interactionsByte = interactionsByte;
+    public void setDoi(String doi) {
+        this.doi = doi;
+    }
+
+    public InteractionContainer getInteractionContainer() {
+        return interactionContainer;
+    }
+
+    public void setInteractionContainer(InteractionContainer interactionContainer) {
+        this.interactionContainer = interactionContainer;
     }
 }
 
