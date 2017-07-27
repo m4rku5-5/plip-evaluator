@@ -1,16 +1,9 @@
 package de.bioforscher.plip.evaluator;
 
-import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
-import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.feature.sse.assp.ASSPSecondaryStructure;
-import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
-import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Structure;
-import de.bioforscher.jstructure.model.structure.StructureParser;
-import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import org.apache.commons.cli.*;
+
+import java.io.IOException;
+import java.util.Date;
 
 
 /**
@@ -19,49 +12,76 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
  */
 
 public class PLIPEvaluator {
-    public static void main(String[] args) {
-        //process("1aki");
-        test();
+    public static void main(String[] args) throws ParseException {
 
+        Options options = new Options();
 
+        options.addOption(
+                OptionBuilder.withArgName("pdbid")
+                        .hasArg()
+                        .withDescription("PDBID which should be processed")
+                        .create("pdbid"));
 
-    }
+        options.addOption(
+                OptionBuilder
+                .withDescription("display this message and exit")
+                .create("help"));
 
-    private static void process(String pdbID) {
-        Structure protein = StructureParser.source(pdbID).parse();
+        options.addOption("literature", false,"Literature insertion mode with graphical user interface");
 
-        // annotate the features
-        new DictionaryOfProteinSecondaryStructure().process(protein);
-        new PLIPAnnotator().process(protein);
+        options.addOption("expDB", false,"export the processed proteins to an database; included in 'literature'");
 
-        // traverse all amino acids of the protein
-        for(Chain chain : protein.getChains()) {
-            for (Group group : chain.getGroups()) {
-                if(!(group instanceof AminoAcid)) {
-                    continue;
-                }
+        CommandLineParser parser = new BasicParser();
+        CommandLine cmd = parser.parse(options, args);
 
-                DSSPSecondaryStructure secondaryStructure = group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
-                PLIPInteractionContainer plipInteractionContainer = group.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
-
-                System.out.println(group);
-                System.out.println(plipInteractionContainer.getHydrogenBonds());
-                if(!plipInteractionContainer.getHydrogenBonds().isEmpty()){
-                System.out.print(plipInteractionContainer.getHydrogenBonds().get(0).getAcceptor().getParentGroup().getResidueIdentifier().getResidueNumber() + " ");
-                System.out.println(plipInteractionContainer.getHydrogenBonds().get(0).getDonor().getParentGroup().getResidueIdentifier().getResidueNumber());}
-                System.out.println();
-
-                //for (HydrogenBond hydrogenBond : plipInteractionContainer.getHydrogenBonds()) {
-
-               //}
-            }
+        Date d = null;
+        try {
+            d = new Date(PLIPEvaluator.class.getResource("PLIPEvaluator.class").openConnection().getLastModified());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        System.out.println("PLIP Evaluator from " + d);
+
+
+        if(cmd.hasOption("help")){
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("plip-evaluator -pdbid <pdbid> [...]","", options,"");
+        }
+
+        if (cmd.hasOption("literature")){
+            System.out.println("Switching to literature insertion mode");
+            //TODO binding to literature mode
+        }
+
+        int withExport = 0;
+        if (cmd.hasOption("expDB")){
+            withExport = 1;
+        }
+
+        if (cmd.hasOption("pdbid")){
+            String pdbid = cmd.getOptionValue("pdbid");
+            process(pdbid, withExport);
+        }
+
+
+        //test();
+
+
+
     }
+
+
+
+    private static void process(String pdbid, int withExport){
+        //TODO
+    }
+
+
 
     public static void test(){
 
-
-
-
+        EvaluatorModule module = new DSSP();
+        module.processPDBid("1aki");
     }
 }

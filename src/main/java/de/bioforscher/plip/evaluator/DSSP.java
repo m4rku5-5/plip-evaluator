@@ -19,7 +19,7 @@ import java.util.List;
 class DSSP implements EvaluatorModule {
 
     // central function
-    public Protein processPDBidDSSP(String PDBid){
+    public Protein processPDBid(String PDBid){
         //make new structure and process with DSSP
         Structure protein = StructureParser.source(PDBid).parse();
         new DictionaryOfProteinSecondaryStructure().process(protein);
@@ -78,5 +78,4 @@ class DSSP implements EvaluatorModule {
 
 
     }
-
 }

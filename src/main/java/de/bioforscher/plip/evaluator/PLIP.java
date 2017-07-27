@@ -3,7 +3,6 @@ package de.bioforscher.plip.evaluator;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -19,7 +18,7 @@ import java.util.List;
 
 class PLIP implements EvaluatorModule {
 
-    public Protein processPDBidPLIP(String PDBid){
+    public Protein processPDBid(String PDBid){
 
         //make new structure and process with DSSP
         Structure protein = StructureParser.source(PDBid).parse();
@@ -52,6 +51,4 @@ class PLIP implements EvaluatorModule {
 
         return returnProtein;
     }
-
-
 }
