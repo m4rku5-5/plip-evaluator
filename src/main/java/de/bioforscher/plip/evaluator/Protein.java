@@ -15,26 +15,25 @@ public class Protein implements Serializable{
    @Id
     private String PDBid;
     private String chain;
-    private byte[] interactionContainerByte;
+    private byte[] predictedContainerByte;
     private String doi;
 
     @Transient
-    private InteractionContainer interactionContainer;
+    private PredictedContainer predictedContainer;
 
 
-
-    public Protein(String doi, String PDBid, String chain, InteractionContainer interactionContainer) {
+    public Protein(String doi, String PDBid, String chain, PredictedContainer predictedContainer) {
         this.doi = doi;
         this.PDBid = PDBid;
         this.chain = chain;
-        this.interactionContainer = interactionContainer;
+        this.predictedContainer = predictedContainer;
     }
 
-    public Protein(String doi, String PDBid, String chain, byte[] interactionContainerByte) {
+    public Protein(String doi, String PDBid, String chain, byte[] predictedContainerByte) {
         this.doi = doi;
         this.PDBid = PDBid;
         this.chain = chain;
-        this.interactionContainerByte = interactionContainerByte;
+        this.predictedContainerByte = predictedContainerByte;
     }
 
     public String getPDBid() {
@@ -53,12 +52,12 @@ public class Protein implements Serializable{
         this.chain = chain;
     }
 
-    public byte[] getInteractionContainerByte() {
-        return interactionContainerByte;
+    public byte[] getPredictedContainerByte() {
+        return predictedContainerByte;
     }
 
-    public void setInteractionContainerByte(byte[] interactionContainerByte) {
-        this.interactionContainerByte = interactionContainerByte;
+    public void setPredictedContainerByte(byte[] predictedContainerByte) {
+        this.predictedContainerByte = predictedContainerByte;
     }
 
     public String getDoi() {
@@ -69,12 +68,12 @@ public class Protein implements Serializable{
         this.doi = doi;
     }
 
-    public InteractionContainer getInteractionContainer() {
-        return interactionContainer;
+    public PredictedContainer getPredictedContainer() {
+        return predictedContainer;
     }
 
-    public void setInteractionContainer(InteractionContainer interactionContainer) {
-        this.interactionContainer = interactionContainer;
+    public void setPredictedContainer(PredictedContainer predictedContainer) {
+        this.predictedContainer = predictedContainer;
     }
 }
 

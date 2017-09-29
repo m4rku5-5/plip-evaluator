@@ -18,7 +18,7 @@ import java.util.List;
 
 class PLIP implements EvaluatorModule {
 
-    public Protein processPDBid(String PDBid){
+    public InteractionContainer processPDBid(String PDBid){
 
         //make new structure and process with DSSP
         Structure protein = StructureParser.source(PDBid).parse();
@@ -47,8 +47,8 @@ class PLIP implements EvaluatorModule {
         InteractionContainer interactionContainer = new InteractionContainer(hBondInteractions);
 
         //make a protein to return
-        Protein returnProtein = new Protein("", protein.getProteinIdentifier().getPdbId(), "all", interactionContainer);
+        //Protein returnProtein = new Protein("", protein.getProteinIdentifier().getPdbId(), "all", interactionContainer);
 
-        return returnProtein;
+        return interactionContainer;
     }
 }

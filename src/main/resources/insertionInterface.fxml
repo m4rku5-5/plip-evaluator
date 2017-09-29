@@ -34,11 +34,11 @@
          </columnResizePolicy>
       </TableView>
       <TextField fx:id="doi" layoutX="97.0" layoutY="101.0" />
-      <TextField fx:id="chain" layoutX="97.0" layoutY="167.0" />
+      <!--<TextField fx:id="chain" layoutX="97.0" layoutY="167.0" />-->
       <TextField fx:id="PDBid" layoutX="97.0" layoutY="135.0" />
       <Text layoutX="23.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paper DOI:" />
       <Text layoutX="23.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PDB ID:" />
-      <Text layoutX="23.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chain:" />
+      <!--<Text layoutX="23.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chain:" />-->
       <Button fx:id="submitProt" layoutX="80.0" layoutY="230.0" mnemonicParsing="false" onAction="#SubmitButtonAction" text="Submit Protein" />
       <Text layoutX="265.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Interactions:" />
       <TextField fx:id="residueNumber" layoutX="265.0" layoutY="284.0" prefHeight="25.0" prefWidth="78.0" promptText="ResidueNumber" />

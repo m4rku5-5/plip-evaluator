@@ -1,5 +1,6 @@
 package de.bioforscher.plip.evaluator.InsertionInterface;
 
+import de.bioforscher.plip.evaluator.HBondInteraction;
 import de.bioforscher.plip.evaluator.HibernateHandler;
 //import de.bioforscher.plip.evaluator.Interaction;
 import de.bioforscher.plip.evaluator.Protein;
@@ -8,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.commons.lang.StringUtils;
 //import org.apache.commons.lang3.StringUtils;
 
 
@@ -18,9 +20,9 @@ public class Controller {
 
     @FXML TextField residueNumber, aceptor, donor, type;
 
-    @FXML TableView<Interaction> tableView;
-    @FXML TableColumn<Interaction, Integer> resNumberCol, aceptorCol, donorCol;
-    @FXML TableColumn<Interaction, String> interTypeCol;
+    @FXML TableView<HBondInteraction> tableView;
+    @FXML TableColumn<HBondInteraction, Integer> resNumberCol, aceptorCol, donorCol;
+    @FXML TableColumn<HBondInteraction, String> interTypeCol;
 
 
     public void initialize(){
@@ -33,7 +35,7 @@ public class Controller {
 
     //TODO specify interaction types
 
-/*    @FXML
+    @FXML
     protected void addInteractionToTable() {
 //        if (type.getText() == "H-Bond"){
 //            System.err.println("Type must be H-Bond, ::::::::::::::::::::::::::::::::::::");
@@ -42,10 +44,10 @@ public class Controller {
             System.err.println("Residue Number, Donor and Aceptor must be numeric!");
         }
         else {
-            tableView.getItems().add(new Interaction(Integer.valueOf(residueNumber.getText()) , Integer.valueOf(donor.getText()), Integer.valueOf(aceptor.getText()), type.getText()));
+            tableView.getItems().add(new HBondInteraction(Integer.valueOf(residueNumber.getText()) , Integer.valueOf(donor.getText()), Integer.valueOf(aceptor.getText())));
         }
 
-    }*/
+    }
 
 
     @FXML
@@ -62,7 +64,7 @@ public class Controller {
 
         //System.out.println(interactions[0].getResidueNumber());
 
-        Protein protein = new Protein();
+        //Protein protein = new Protein();
 
         /*HibernateHandler handler = new HibernateHandler();
         handler.openSession();

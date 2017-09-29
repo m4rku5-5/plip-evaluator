@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
 import org.hibernate.internal.util.SerializationHelper;
 
 import java.util.ArrayList;
@@ -30,15 +31,27 @@ public class HibernateHandler {
         session = sf.openSession();
     }
 
+    public boolean containsProtein(String pdbid) {
+
+        Transaction ta = session.beginTransaction();
+
+        List<String> proteinList = session.createCriteria(Protein.class).setProjection(Projections.property("PDBid")).list();
+
+        boolean contains = proteinList.contains(pdbid);
+
+        ta.commit();
+
+        return contains;
+    }
 
     public void storeProtein(Protein protein){
 
         //make new container
-        InteractionContainer interactionContainer = protein.getInteractionContainer();
-        byte[] interactionContainerByte = SerializationHelper.serialize(interactionContainer);
+        PredictedContainer predictedContainer = protein.getPredictedContainer();
+        byte[] predictedContainerByte = SerializationHelper.serialize(predictedContainer);
 
         Protein prot = protein;
-        prot.setInteractionContainerByte(interactionContainerByte);
+        prot.setPredictedContainerByte(predictedContainerByte);
 
         Transaction ta = session.beginTransaction();
 
@@ -54,9 +67,9 @@ public class HibernateHandler {
 
         Protein fetchedProtein = session.get(Protein.class, PDBid);
 
-        InteractionContainer fetchedInteractions = (InteractionContainer) SerializationHelper.deserialize(fetchedProtein.getInteractionContainerByte());
+        PredictedContainer fetchedpredictedContainer = (PredictedContainer) SerializationHelper.deserialize(fetchedProtein.getPredictedContainerByte());
 
-        fetchedProtein.setInteractionContainer(fetchedInteractions);
+        fetchedProtein.setPredictedContainer(fetchedpredictedContainer);
 
         ta.commit();
 
@@ -77,8 +90,8 @@ public class HibernateHandler {
 
         for (int i = 0; i < size; i++) {
             Protein currentProt = fetchedProteinList.get(i);
-            InteractionContainer interactionContainer = (InteractionContainer) SerializationHelper.deserialize(currentProt.getInteractionContainerByte());
-            Protein newProtein = new Protein(currentProt.getDoi(),currentProt.getPDBid(),currentProt.getChain(),interactionContainer);
+            PredictedContainer fetchedpredictedContainer = (PredictedContainer) SerializationHelper.deserialize(currentProt.getPredictedContainerByte());
+            Protein newProtein = new Protein(currentProt.getDoi(),currentProt.getPDBid(),currentProt.getChain(),fetchedpredictedContainer);
             ProteinList.add(newProtein);
         }
 

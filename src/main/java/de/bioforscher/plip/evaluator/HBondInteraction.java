@@ -1,13 +1,15 @@
 package de.bioforscher.plip.evaluator;
 
 
+import java.io.Serializable;
+
 /**
  * basic HBond interaction
  */
 
 //TODO maybe some other parameters like energy or angle
 
-public class HBondInteraction {
+public class HBondInteraction implements Serializable{
 
     private int residueNumber;
     private int donor;

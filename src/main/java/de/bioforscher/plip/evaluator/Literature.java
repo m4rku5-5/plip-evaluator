@@ -6,7 +6,7 @@ package de.bioforscher.plip.evaluator;
 class Literature implements EvaluatorModule{
 
     @Override
-    public Protein processPDBid(String PDBid) {
+    public InteractionContainer processPDBid(String PDBid) {
         return null;
     }
 }
