@@ -104,6 +104,7 @@ public class PLIPEvaluator {
             Protein protein = calculateProtein(pdbid);
 
             for (int i = 0; i < protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().size(); i++) {
+                System.out.print(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().get(i).getResidueNumber() + " ");
                 System.out.print(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().get(i).getAccept() + " ");
                 System.out.println(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().get(i).getDonor());
             }
@@ -111,6 +112,7 @@ public class PLIPEvaluator {
             System.out.println();
 
             for (int i = 0; i < protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().size(); i++) {
+                System.out.print(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getResidueNumber() + " ");
                 System.out.print(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getAccept() + " ");
                 System.out.println(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getDonor());
             }

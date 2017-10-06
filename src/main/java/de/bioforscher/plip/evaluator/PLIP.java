@@ -45,9 +45,7 @@ class PLIP implements EvaluatorModule {
 
         // add interactions to container
         InteractionContainer interactionContainer = new InteractionContainer(hBondInteractions);
-
-        //make a protein to return
-        //Protein returnProtein = new Protein("", protein.getProteinIdentifier().getPdbId(), "all", interactionContainer);
+        interactionContainer.removeDuplicateHBonds();
 
         return interactionContainer;
     }

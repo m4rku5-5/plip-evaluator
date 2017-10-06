@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 //import org.apache.commons.lang3.StringUtils;
 
@@ -64,7 +65,7 @@ public class Controller {
     @FXML
     protected void SubmitButtonAction(){
 
-        List<HBondInteraction> hBondInteractions = null;
+        List<HBondInteraction> hBondInteractions = new ArrayList<HBondInteraction>();
         for (int i = 0; i < tableView.getItems().size(); i++) {
             hBondInteractions.add(tableView.getItems().get(i));
         }
@@ -80,10 +81,24 @@ public class Controller {
         if(handler.containsProtein(PDBid.getText())){
             Protein fetchedProtein = handler.fetchProtein(PDBid.getText());
             fetchedProtein.getPredictedContainer().setInteractionContainersLiterature(interactionContainer);
+            if(fetchedProtein.getDoi() == null){
+                fetchedProtein.setDoi(doi.getText());
+            }
+            System.out.println("Storing protein..");
             handler.storeProtein(fetchedProtein);
+
+            PDBid.setText("");
+            doi.setText("");
+            tableView.getItems().clear();
+
         } else {
             Protein protein = new Protein(doi.getText(), PDBid.getText(), "all", predictedContainer);
+            System.out.println("Storing protein..");
             handler.storeProtein(protein);
+
+            PDBid.setText("");
+            doi.setText("");
+            tableView.getItems().clear();
         }
 
 

@@ -1,6 +1,9 @@
 package de.bioforscher.plip.evaluator;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
@@ -24,5 +27,24 @@ public class InteractionContainer implements Serializable{
 
     public List<HBondInteraction> gethBondInteractions() {
         return hBondInteractions;
+    }
+
+    public void removeDuplicateHBonds(){
+
+        List<HBondInteraction> hBondInteractions = this.gethBondInteractions();
+
+        for (int i = 0; i < hBondInteractions.size(); i++) {
+            for (int j = i+1; j < hBondInteractions.size(); j++) {
+                if(hBondInteractions.get(i).equals(hBondInteractions.get(j))){hBondInteractions.remove(j);}
+            }
+        }
+
+        for (int i = 0; i < hBondInteractions.size(); i++) {
+            for (int j = i+1; j < hBondInteractions.size(); j++) {
+                if(hBondInteractions.get(i).equals(hBondInteractions.get(j))){hBondInteractions.remove(j);}
+            }
+        }
+
+        this.sethBondInteractions(hBondInteractions);
     }
 }

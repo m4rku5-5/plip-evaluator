@@ -48,4 +48,11 @@ public class HBondInteraction implements Serializable{
     public void setAccept(int accept) {
         this.accept = accept;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        HBondInteraction hBondInteraction = (HBondInteraction) obj;
+        if (this.getResidueNumber() == hBondInteraction.getResidueNumber() && this.getAccept() == hBondInteraction.getAccept() && this.getDonor() == hBondInteraction.getDonor()){return true;}
+        return false;
+    }
 }
