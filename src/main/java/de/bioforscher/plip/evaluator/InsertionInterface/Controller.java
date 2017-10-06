@@ -1,15 +1,15 @@
 package de.bioforscher.plip.evaluator.InsertionInterface;
 
-import de.bioforscher.plip.evaluator.HBondInteraction;
-import de.bioforscher.plip.evaluator.HibernateHandler;
+import de.bioforscher.plip.evaluator.*;
 //import de.bioforscher.plip.evaluator.Interaction;
-import de.bioforscher.plip.evaluator.Protein;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
 //import org.apache.commons.lang3.StringUtils;
 
 
@@ -18,18 +18,19 @@ public class Controller {
 
     @FXML TextField doi, PDBid, chain;
 
-    @FXML TextField residueNumber, aceptor, donor, type;
+    @FXML TextField residueNumber, acceptor, donor, type;
 
     @FXML TableView<HBondInteraction> tableView;
-    @FXML TableColumn<HBondInteraction, Integer> resNumberCol, aceptorCol, donorCol;
-    @FXML TableColumn<HBondInteraction, String> interTypeCol;
+    @FXML TableColumn<HBondInteraction, Integer> resNumberCol, acceptorCol, donorCol;
+    //@FXML TableColumn<HBondInteraction, String> interTypeCol;
 
 
     public void initialize(){
+
         resNumberCol.setCellValueFactory(new PropertyValueFactory<>("ResidueNumber"));
-        aceptorCol.setCellValueFactory(new PropertyValueFactory<>("Aceptor"));
+        acceptorCol.setCellValueFactory(new PropertyValueFactory<>("Accept"));
         donorCol.setCellValueFactory(new PropertyValueFactory<>("Donor"));
-        interTypeCol.setCellValueFactory(new PropertyValueFactory<>("Type"));
+        //interTypeCol.setCellValueFactory(new PropertyValueFactory<>("Type"));
     }
 
 
@@ -40,36 +41,52 @@ public class Controller {
 //        if (type.getText() == "H-Bond"){
 //            System.err.println("Type must be H-Bond, ::::::::::::::::::::::::::::::::::::");
 //        }
-        if (StringUtils.isNumeric(residueNumber.getText()) == false || StringUtils.isNumeric(donor.getText()) == false || StringUtils.isNumeric(aceptor.getText()) == false){
-            System.err.println("Residue Number, Donor and Aceptor must be numeric!");
+        if (StringUtils.isNumeric(residueNumber.getText()) == false || StringUtils.isNumeric(donor.getText()) == false || StringUtils.isNumeric(acceptor.getText()) == false){
+            System.err.println("Residue Number, Donor and Acceptor must be numeric!");
         }
         else {
-            tableView.getItems().add(new HBondInteraction(Integer.valueOf(residueNumber.getText()) , Integer.valueOf(donor.getText()), Integer.valueOf(aceptor.getText())));
+            tableView.getItems().add(new HBondInteraction(Integer.valueOf(residueNumber.getText()) , Integer.valueOf(donor.getText()), Integer.valueOf(acceptor.getText())));
+
+            residueNumber.setText("");
+            donor.setText("");
+            acceptor.setText("");
+            //type.setText("");
         }
 
+    }
+
+    @FXML
+    protected void removeInteractionFromTable(){
+        tableView.getItems().remove(tableView.getSelectionModel().getSelectedIndex());
     }
 
 
     @FXML
     protected void SubmitButtonAction(){
-        String doiText = doi.getText();
-        String PDBidText = PDBid.getText();
-        String chainText = chain.getText();
+
+        List<HBondInteraction> hBondInteractions = null;
+        for (int i = 0; i < tableView.getItems().size(); i++) {
+            hBondInteractions.add(tableView.getItems().get(i));
+        }
+
+        InteractionContainer interactionContainer = new InteractionContainer(hBondInteractions);
+        PredictedContainer predictedContainer = new PredictedContainer();
+        predictedContainer.setInteractionContainersLiterature(interactionContainer);
 
 
-        //Interaction[] interactions = new Interaction[tableView.getItems().size()];
-        //interactions = tableView.getItems().toArray();
-
-
-
-        //System.out.println(interactions[0].getResidueNumber());
-
-        //Protein protein = new Protein();
-
-        /*HibernateHandler handler = new HibernateHandler();
+        HibernateHandler handler = new HibernateHandler();
         handler.openSession();
-        handler.storeProtein(protein);
-        handler.closeSession();*/
+
+        if(handler.containsProtein(PDBid.getText())){
+            Protein fetchedProtein = handler.fetchProtein(PDBid.getText());
+            fetchedProtein.getPredictedContainer().setInteractionContainersLiterature(interactionContainer);
+            handler.storeProtein(fetchedProtein);
+        } else {
+            Protein protein = new Protein(doi.getText(), PDBid.getText(), "all", predictedContainer);
+            handler.storeProtein(protein);
+        }
+
+
     }
 
 

@@ -1,8 +1,6 @@
 package de.bioforscher.plip.evaluator;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -12,28 +10,21 @@ import java.io.Serializable;
 @Entity
 public class Protein implements Serializable{
 
-   @Id
-    private String PDBid;
-    private String chain;
-    private byte[] predictedContainerByte;
-    private String doi;
+    @Id
+     String PDBid;
+     String chain;
+     String doi;
 
-    @Transient
-    private PredictedContainer predictedContainer;
+     @Transient
+     PredictedContainer predictedContainer;
 
+    public Protein(){}
 
     public Protein(String doi, String PDBid, String chain, PredictedContainer predictedContainer) {
         this.doi = doi;
         this.PDBid = PDBid;
         this.chain = chain;
         this.predictedContainer = predictedContainer;
-    }
-
-    public Protein(String doi, String PDBid, String chain, byte[] predictedContainerByte) {
-        this.doi = doi;
-        this.PDBid = PDBid;
-        this.chain = chain;
-        this.predictedContainerByte = predictedContainerByte;
     }
 
     public String getPDBid() {
@@ -52,15 +43,7 @@ public class Protein implements Serializable{
         this.chain = chain;
     }
 
-    public byte[] getPredictedContainerByte() {
-        return predictedContainerByte;
-    }
-
-    public void setPredictedContainerByte(byte[] predictedContainerByte) {
-        this.predictedContainerByte = predictedContainerByte;
-    }
-
-    public String getDoi() {
+        public String getDoi() {
         return doi;
     }
 

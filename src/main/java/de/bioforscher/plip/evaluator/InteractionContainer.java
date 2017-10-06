@@ -12,6 +12,7 @@ public class InteractionContainer implements Serializable{
     private List<HBondInteraction> hBondInteractions;
     // more to come
 
+    public InteractionContainer(){}
 
     public InteractionContainer(List<HBondInteraction> hBondInteractions) {
         this.hBondInteractions = hBondInteractions;

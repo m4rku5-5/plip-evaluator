@@ -24,7 +24,7 @@ public class HibernateHandler {
     public void openSession(){
 
         //loading configuration file
-        con = new Configuration().configure().addAnnotatedClass(Protein.class);
+        con = new Configuration().configure().addAnnotatedClass(ProteinByte.class);
 
         sf = con.buildSessionFactory();
 
@@ -35,7 +35,7 @@ public class HibernateHandler {
 
         Transaction ta = session.beginTransaction();
 
-        List<String> proteinList = session.createCriteria(Protein.class).setProjection(Projections.property("PDBid")).list();
+        List<String> proteinList = session.createCriteria(ProteinByte.class).setProjection(Projections.property("PDBid")).list();
 
         boolean contains = proteinList.contains(pdbid);
 
@@ -50,12 +50,11 @@ public class HibernateHandler {
         PredictedContainer predictedContainer = protein.getPredictedContainer();
         byte[] predictedContainerByte = SerializationHelper.serialize(predictedContainer);
 
-        Protein prot = protein;
-        prot.setPredictedContainerByte(predictedContainerByte);
+        ProteinByte proteinByte = new ProteinByte(protein.getDoi(), protein.getPDBid(), protein.getChain(), predictedContainerByte);
 
         Transaction ta = session.beginTransaction();
 
-        session.saveOrUpdate(prot);
+        session.saveOrUpdate(proteinByte);
 
         ta.commit();
     }
@@ -65,15 +64,19 @@ public class HibernateHandler {
 
         Transaction ta = session.beginTransaction();
 
-        Protein fetchedProtein = session.get(Protein.class, PDBid);
+       // Protein protein = (Protein) session.createSQLQuery("SELECT * FROM protein").list().get(0);
 
-        PredictedContainer fetchedpredictedContainer = (PredictedContainer) SerializationHelper.deserialize(fetchedProtein.getPredictedContainerByte());
+        ProteinByte fetchedProtein = session.get(ProteinByte.class, PDBid);
 
-        fetchedProtein.setPredictedContainer(fetchedpredictedContainer);
+        System.out.println(fetchedProtein.getPredictedContainerByte());
+
+        //PredictedContainer fetchedpredictedContainer = (PredictedContainer) SerializationHelper.deserialize();
+
+        //fetchedProtein.setPredictedContainer(fetchedpredictedContainer);
 
         ta.commit();
 
-        return fetchedProtein;
+        return null;
     }
 
     public List<Protein> fetchAllProteins(){
@@ -84,7 +87,7 @@ public class HibernateHandler {
 
         ta.commit();
 
-        int size = fetchedProteinList.size();
+        /*int size = fetchedProteinList.size();
 
         List<Protein> ProteinList = new ArrayList<Protein>();
 
@@ -94,8 +97,8 @@ public class HibernateHandler {
             Protein newProtein = new Protein(currentProt.getDoi(),currentProt.getPDBid(),currentProt.getChain(),fetchedpredictedContainer);
             ProteinList.add(newProtein);
         }
-
-        return ProteinList;
+*/
+        return fetchedProteinList;
     }
 
     public void closeSession(){

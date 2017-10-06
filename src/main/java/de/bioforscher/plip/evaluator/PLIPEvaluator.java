@@ -90,6 +90,7 @@ public class PLIPEvaluator {
             if(containsProtein == true){
                 System.out.println("Protein exists -- Fetching Protein");
                 Protein protein = handler.fetchProtein(pdbid);
+                System.out.println(protein.getPredictedContainer());
             } else if (containsProtein == false){
                 System.out.println("Protein doesn't exist in Database -- SecStruct is being calculated.....");
                 Protein protein = calculateProtein(pdbid);
@@ -101,6 +102,20 @@ public class PLIPEvaluator {
         } else {
             System.out.println("Ignoring Database -- Calculating SecStruct.....");
             Protein protein = calculateProtein(pdbid);
+
+            for (int i = 0; i < protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().size(); i++) {
+                System.out.print(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().get(i).getAccept() + " ");
+                System.out.println(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().get(i).getDonor());
+            }
+
+            System.out.println();
+
+            for (int i = 0; i < protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().size(); i++) {
+                System.out.print(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getAccept() + " ");
+                System.out.println(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getDonor());
+            }
+
+
         }
 
     }
@@ -119,9 +134,16 @@ public class PLIPEvaluator {
         return protein;
     }
 
+
     public static void test(){
 
+        HibernateHandler handler = new HibernateHandler();
+        handler.openSession();
+        Protein protein = handler.fetchProtein("1pqs");
+        handler.closeSession();
 
+        System.out.println(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions());
 
+        System.exit(0);
     }
 }
