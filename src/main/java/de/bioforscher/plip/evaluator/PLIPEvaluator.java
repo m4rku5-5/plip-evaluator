@@ -117,6 +117,12 @@ public class PLIPEvaluator {
                 System.out.println(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getDonor());
             }
 
+            System.out.println("Analysing Protein....");
+            Analyzer analyzer = new Analyzer();
+            System.out.println("PLIP:");
+            analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersPLIP());
+            System.out.println("DSSP:");
+            analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersDSSP());
 
         }
 
