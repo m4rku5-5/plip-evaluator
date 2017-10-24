@@ -30,7 +30,7 @@ public class Analyzer {
 
         public void setEdge(int source, int destination) {
 
-            if (source > Adjacency_List.size() || destination > Adjacency_List.size()) {
+            if (source > Adjacency_List.size() || destination > Adjacency_List.size() || destination == 0 || source == 0) {
 
                 System.out.println("set the vertex entered in not present ");
 
@@ -82,32 +82,29 @@ public class Analyzer {
             adjacencyList.setEdge(hBondInteractions.get(i).getDonor(), hBondInteractions.get(i).getAccept());
         }
 
-        for (int i = tempList.get(0); i <= number_of_vertices; i++) {
-            System.out.print(i + ": ");
-            System.out.println(adjacencyList.getEdge(i).toString());
-        }
+//        for (int i = tempList.get(0); i <= number_of_vertices; i++) {
+//            System.out.print(i + ": ");
+//            System.out.println(adjacencyList.getEdge(i).toString());
+//        }
 
         return adjacencyList;
 
     }
 
-    public ListMultimap<HBondInteraction, Integer> compareHBondInteractions(){
-        ListMultimap<HBondInteraction, Integer> compared = ArrayListMultimap.create();
-
-
-
-
-        return compared;
-    }
-
-    public List<HBondInteraction> findExactHBondMatches(){
+    public List<HBondInteraction> findExactHBondMatches(PredictedContainer predictedContainer){
         List<HBondInteraction> matches = new ArrayList<>();
 
 
+        List<HBondInteraction> hBondInteractionDSSP = predictedContainer.getInteractionContainersDSSP().gethBondInteractions();
+        List<HBondInteraction> hBondInteractionPLIP = predictedContainer.getInteractionContainersPLIP().gethBondInteractions();
 
-
-
-
+        for (int i = 0; i < hBondInteractionPLIP.size(); i++) {
+            for (int j = 0; j < hBondInteractionDSSP.size(); j++) {
+                if (hBondInteractionPLIP.get(i).getAccept() == hBondInteractionDSSP.get(j).getAccept() && hBondInteractionPLIP.get(i).getDonor() == hBondInteractionDSSP.get(j).getDonor()){
+                    matches.add(hBondInteractionPLIP.get(i));
+                }
+            }
+        }
 
         return matches;
     }

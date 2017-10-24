@@ -9,8 +9,7 @@ import java.util.Date;
 
 
 /**
- * central evaluator
- * --> currently only test functions
+ * Evaluator Main Class: Implements CLI and accesses all other functionality
  */
 
 public class PLIPEvaluator {
@@ -33,6 +32,13 @@ public class PLIPEvaluator {
 
         options.addOption("withDB", false,"export the processed proteins to an database; included in 'literature'");
 
+        options.addOption(
+                OptionBuilder.withArgName("type")
+                        .hasArg()
+                        .withDescription("Analyze Protein with specified type; Valid <types> are: \n \t adj - make adjacency table for Protein interactions from PLIP and DSSP" +
+                                "                                                                 \n \t hbm - find exact HBond matches between PLIP and DSSP")
+                        .create("analyze"));
+
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse(options, args);
 
@@ -46,7 +52,7 @@ public class PLIPEvaluator {
         System.out.println("PLIP Evaluator from " + d);
 
 
-        if(cmd.hasOption("help")){
+        if(cmd.hasOption("help") && !cmd.hasOption("pdbid")){
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("plip-evaluator -pdbid <pdbid> [...]","", options,"");
         }
@@ -62,25 +68,26 @@ public class PLIPEvaluator {
             withDB = 1;
         }
 
+        Protein protein = new Protein();
         if (cmd.hasOption("pdbid")){
             String pdbid = cmd.getOptionValue("pdbid");
-            process(pdbid, withDB);
-        } else {
+            protein = process(pdbid, withDB);
+        } else if (!cmd.hasOption("help")){
             System.err.println("Please give pdbid! See usage!");
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("plip-evaluator -pdbid <pdbid> [...]","", options,"");
         }
 
-
-        //test();
-
-
-
+        if (cmd.hasOption("analyze")){
+            String type = cmd.getOptionValue("analyze");
+            analyze(protein, type);
+        }
     }
 
 
+    private static Protein process(String pdbid, int withDB){
 
-    private static void process(String pdbid, int withDB){
+        Protein protein = new Protein();
 
         if(withDB == 1){
             HibernateHandler handler = new HibernateHandler();
@@ -89,11 +96,10 @@ public class PLIPEvaluator {
             boolean containsProtein = handler.containsProtein(pdbid);
             if(containsProtein == true){
                 System.out.println("Protein exists -- Fetching Protein");
-                Protein protein = handler.fetchProtein(pdbid);
-                System.out.println(protein.getPredictedContainer());
+                protein = handler.fetchProtein(pdbid);
             } else if (containsProtein == false){
                 System.out.println("Protein doesn't exist in Database -- SecStruct is being calculated.....");
-                Protein protein = calculateProtein(pdbid);
+                protein = calculateProtein(pdbid);
                 System.out.println("Storing Protein.");
                 handler.storeProtein(protein);
             }
@@ -101,34 +107,13 @@ public class PLIPEvaluator {
             handler.closeSession();
         } else {
             System.out.println("Ignoring Database -- Calculating SecStruct.....");
-            Protein protein = calculateProtein(pdbid);
-
-            for (int i = 0; i < protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().size(); i++) {
-                System.out.print(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().get(i).getResidueNumber() + " ");
-                System.out.print(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().get(i).getAccept() + " ");
-                System.out.println(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions().get(i).getDonor());
-            }
-
-            System.out.println();
-
-            for (int i = 0; i < protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().size(); i++) {
-                System.out.print(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getResidueNumber() + " ");
-                System.out.print(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getAccept() + " ");
-                System.out.println(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions().get(i).getDonor());
-            }
-
-            System.out.println("Analysing Protein....");
-            Analyzer analyzer = new Analyzer();
-            System.out.println("PLIP:");
-            analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersPLIP());
-            System.out.println("DSSP:");
-            analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersDSSP());
-
+            protein = calculateProtein(pdbid);
         }
 
+        return protein;
     }
 
-    public static Protein calculateProtein(String pdbid){
+    private static Protein calculateProtein(String pdbid){
         EvaluatorModule moduleDSSP = new DSSP();
         EvaluatorModule modulePLIP = new PLIP();
 
@@ -142,16 +127,17 @@ public class PLIPEvaluator {
         return protein;
     }
 
-
-    public static void test(){
-
-        HibernateHandler handler = new HibernateHandler();
-        handler.openSession();
-        Protein protein = handler.fetchProtein("1pqs");
-        handler.closeSession();
-
-        System.out.println(protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions());
-
-        System.exit(0);
+    private static void analyze(Protein protein, String type){
+        Analyzer analyzer = new Analyzer();
+        if (type == "adj"){
+            System.out.println("Adjacency List for PLIP: ");
+            analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersPLIP());
+            System.out.println("Adjacency List for DSSP: ");
+            analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersDSSP());
+        } else if (type == "hbm"){
+            System.out.println("Exact HBond matches between PLIP and DSSP: ");
+            analyzer.findExactHBondMatches(protein.getPredictedContainer());
+        }
     }
+
 }

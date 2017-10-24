@@ -55,4 +55,10 @@ public class HBondInteraction implements Serializable{
         if (this.getResidueNumber() == hBondInteraction.getResidueNumber() && this.getAccept() == hBondInteraction.getAccept() && this.getDonor() == hBondInteraction.getDonor()){return true;}
         return false;
     }
+
+    @Override
+    public String toString() {
+        String output = "R: " + this.getResidueNumber() + "  A: " + this.getAccept() + "  D: " + this.getDonor();
+        return output;
+    }
 }
