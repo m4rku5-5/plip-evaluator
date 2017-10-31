@@ -58,7 +58,7 @@ public class HBondInteraction implements Serializable{
 
     @Override
     public String toString() {
-        String output = "R: " + this.getResidueNumber() + "  A: " + this.getAccept() + "  D: " + this.getDonor();
+        String output = this.getResidueNumber() + " " + this.getAccept() + " " + this.getDonor();
         return output;
     }
 }

@@ -128,15 +128,39 @@ public class PLIPEvaluator {
     }
 
     private static void analyze(Protein protein, String type){
+        System.out.println("Analyzing protein....");
         Analyzer analyzer = new Analyzer();
-        if (type == "adj"){
-            System.out.println("Adjacency List for PLIP: ");
-            analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersPLIP());
-            System.out.println("Adjacency List for DSSP: ");
-            analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersDSSP());
-        } else if (type == "hbm"){
-            System.out.println("Exact HBond matches between PLIP and DSSP: ");
-            analyzer.findExactHBondMatches(protein.getPredictedContainer());
+
+        switch (type){
+            case "adj": System.out.println("Adjacency List for PLIP: ");
+                analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersPLIP());
+                System.out.println("Adjacency List for DSSP: ");
+                analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersDSSP());
+
+
+            case "hbm": System.out.println("Exact HBond matches between PLIP and DSSP: ");
+                System.out.println("Res Acc Don");
+                for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer()).size(); i++) {
+                    System.out.println(analyzer.findExactHBondMatches(protein.getPredictedContainer()).get(i));
+                }
+                break;
+
+            case "allint":  System.out.println("Printing all interactions:");
+                System.out.println("DSSP: ");
+                System.out.println("Res Acc Don");
+                for (int i = 0; i < protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().size(); i++) {
+                    System.out.println(protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().get(i));
+                }
+                System.out.println("\nPLIP: ");
+                System.out.println("Res Acc Don");
+                for (int i = 0; i < protein.predictedContainer.getInteractionContainersPLIP().gethBondInteractions().size(); i++) {
+                    System.out.println(protein.predictedContainer.getInteractionContainersPLIP().gethBondInteractions().get(i));
+                }
+                break;
+
+            default:
+                System.err.println("Wrong analyzing parameter!");
+                break;
         }
     }
 
