@@ -1,10 +1,9 @@
 package de.bioforscher.plip.evaluator;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * Created by Markus on 27.09.2017.
+ * 'container' holding all interactionContainers for different algorithms
  */
 public class PredictedContainer implements Serializable {
     private InteractionContainer interactionContainersDSSP;

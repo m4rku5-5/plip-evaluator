@@ -10,11 +10,13 @@ import java.util.Date;
 
 /**
  * Evaluator Main Class: Implements CLI and accesses all other functionality
+ * PLIP Evaluator by Markus Schwalbe, 2017
  */
 
 public class PLIPEvaluator {
     public static void main(String[] args) throws ParseException {
 
+        //set Options for CLI
         Options options = new Options();
 
         options.addOption(
@@ -39,9 +41,13 @@ public class PLIPEvaluator {
                                 "                                                                 \n \t hbm - find exact HBond matches between PLIP and DSSP")
                         .create("analyze"));
 
+        options.addOption("json",false,"Exports all Proteins of the database as JSON file");
+
+        //make CLI
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse(options, args);
 
+        //get Date vor current version output
         Date d = null;
         try {
             d = new Date(PLIPEvaluator.class.getResource("PLIPEvaluator.class").openConnection().getLastModified());
@@ -51,7 +57,7 @@ public class PLIPEvaluator {
 
         System.out.println("PLIP Evaluator from " + d);
 
-
+        //handle input options
         if(cmd.hasOption("help") && !cmd.hasOption("pdbid")){
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("plip-evaluator -pdbid <pdbid> [...]","", options,"");
@@ -82,9 +88,14 @@ public class PLIPEvaluator {
             String type = cmd.getOptionValue("analyze");
             analyze(protein, type);
         }
+
+        if (cmd.hasOption("json")){
+            System.out.println("Exporting Database");
+            new JsonExporter().exportDBAsJson();
+        }
     }
 
-
+    //process given pdbid with or without DB
     private static Protein process(String pdbid, int withDB){
 
         Protein protein = new Protein();
@@ -113,6 +124,7 @@ public class PLIPEvaluator {
         return protein;
     }
 
+    //calculate the SecStuct
     private static Protein calculateProtein(String pdbid){
         EvaluatorModule moduleDSSP = new DSSP();
         EvaluatorModule modulePLIP = new PLIP();
@@ -127,25 +139,33 @@ public class PLIPEvaluator {
         return protein;
     }
 
+    //analyze Protein with given parameter --> print Adjacency List; find exact matches for HBonds; print all Interactions
     private static void analyze(Protein protein, String type){
         System.out.println("Analyzing protein....");
         Analyzer analyzer = new Analyzer();
 
+        System.out.println("Protein Id: " + protein.getPDBid());
+        if (protein.getDoi() != null){
+            System.out.println("DOI: " + protein.getDoi());
+        } else {
+            System.out.println("DOI: none");
+        }
+
         switch (type){
-            case "adj": System.out.println("Adjacency List for PLIP: ");
+            case "adj": System.out.println("\n Adjacency List for PLIP: ");
                 analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersPLIP());
-                System.out.println("Adjacency List for DSSP: ");
+                System.out.println("\n Adjacency List for DSSP: ");
                 analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersDSSP());
+                break;
 
-
-            case "hbm": System.out.println("Exact HBond matches between PLIP and DSSP: ");
+            case "hbm": System.out.println("\n Exact HBond matches between PLIP and DSSP: ");
                 System.out.println("Res Acc Don");
                 for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer()).size(); i++) {
                     System.out.println(analyzer.findExactHBondMatches(protein.getPredictedContainer()).get(i));
                 }
                 break;
 
-            case "allint":  System.out.println("Printing all interactions:");
+            case "allint":  System.out.println("\n Printing all interactions:");
                 System.out.println("DSSP: ");
                 System.out.println("Res Acc Don");
                 for (int i = 0; i < protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().size(); i++) {
@@ -156,6 +176,16 @@ public class PLIPEvaluator {
                 for (int i = 0; i < protein.predictedContainer.getInteractionContainersPLIP().gethBondInteractions().size(); i++) {
                     System.out.println(protein.predictedContainer.getInteractionContainersPLIP().gethBondInteractions().get(i));
                 }
+                System.out.println("\nLiterature: ");
+                System.out.println("Res Acc Don");
+                if (protein.predictedContainer.getInteractionContainersLiterature().gethBondInteractions() != null){
+                    for (int i = 0; i < protein.predictedContainer.getInteractionContainersLiterature().gethBondInteractions().size(); i++) {
+                        System.out.println(protein.predictedContainer.getInteractionContainersLiterature().gethBondInteractions().get(i));
+                    }
+                } else {
+                    System.out.println("No interactions present.");
+                }
+
                 break;
 
             default:

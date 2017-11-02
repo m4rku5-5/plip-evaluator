@@ -11,11 +11,14 @@ import java.io.Serializable;
 
 public class HBondInteraction implements Serializable{
 
+    //for serialisation needed
+    private static final long serialVersionUID = 1428943466024358597L;
+
     private int residueNumber;
     private int donor;
     private int accept;
 
-
+    //basic constructor
     public HBondInteraction(int residueNumber, int donor, int accept) {
         this.residueNumber = residueNumber;
         this.donor = donor;
@@ -49,6 +52,7 @@ public class HBondInteraction implements Serializable{
         this.accept = accept;
     }
 
+    //for comparing to interactions
     @Override
     public boolean equals(Object obj) {
         HBondInteraction hBondInteraction = (HBondInteraction) obj;

@@ -40,7 +40,6 @@ class DSSP implements EvaluatorModule {
                 HBondInteraction interaction1 = new HBondInteraction();
 
 
-                //TODO --> is acceptor donor assignment right??
                 if (secondaryStructureDSSP.getAccept1().getPartner() != null){
                     interaction1.setAccept(secondaryStructureDSSP.getAccept1().getPartner().getResidueIdentifier().getResidueNumber());
                 }

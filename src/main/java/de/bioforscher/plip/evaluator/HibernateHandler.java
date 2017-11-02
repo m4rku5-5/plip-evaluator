@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Projections;
 import org.hibernate.internal.util.SerializationHelper;
+import org.hibernate.type.StandardBasicTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class HibernateHandler {
 
     public void storeProtein(Protein protein){
 
-        //make new container
+        //make new container and serialize the predictedContainer
         PredictedContainer predictedContainer = protein.getPredictedContainer();
         byte[] predictedContainerByte = SerializationHelper.serialize(predictedContainer);
 
@@ -59,45 +60,65 @@ public class HibernateHandler {
         ta.commit();
     }
 
+    public void mergeProtein(Protein protein){
+
+        //same as storeProtein but other storing action
+        PredictedContainer predictedContainer = protein.getPredictedContainer();
+        byte[] predictedContainerByte = SerializationHelper.serialize(predictedContainer);
+
+        ProteinByte proteinByte = new ProteinByte(protein.getDoi(), protein.getPDBid(), protein.getChain(), predictedContainerByte);
+
+        Transaction ta = session.beginTransaction();
+
+        session.merge(proteinByte);
+
+        ta.commit();
+    }
+
 
     public Protein fetchProtein(String PDBid){
 
         Transaction ta = session.beginTransaction();
 
-       // Protein protein = (Protein) session.createSQLQuery("SELECT * FROM protein").list().get(0);
+        //getting and deserializing the protein/predictedContainer --> not the fine english way because it's a workaround!
+        byte[] predictedContainerBytes = (byte[]) session.createSQLQuery("SELECT predictedContainerByte FROM `protein` WHERE `PDBid`=:PDBid ").addScalar("predictedContainerByte", StandardBasicTypes.BINARY).setString("PDBid", PDBid).uniqueResult();
 
         ProteinByte fetchedProtein = session.get(ProteinByte.class, PDBid);
 
-        System.out.println(fetchedProtein.getPredictedContainerByte());
+        PredictedContainer fetchedpredictedContainer = (PredictedContainer) SerializationHelper.deserialize(predictedContainerBytes);
 
-        //PredictedContainer fetchedpredictedContainer = (PredictedContainer) SerializationHelper.deserialize();
-
-        //fetchedProtein.setPredictedContainer(fetchedpredictedContainer);
+        fetchedProtein.setPredictedContainer(fetchedpredictedContainer);
 
         ta.commit();
 
-        return null;
+        return fetchedProtein;
     }
 
     public List<Protein> fetchAllProteins(){
 
+        //same as fetchProtein but before getting a list of all proteins and then fetching each individual and storing them in a list
+        List<Protein> fetchedProteinList = new ArrayList<>();
+
         Transaction ta = session.beginTransaction();
 
-        List<Protein> fetchedProteinList = session.createCriteria(Protein.class).list();
+        List<String> PDBidList = session.createSQLQuery("SELECT PDBid FROM `protein`").list();
+
+        for (int i = 0; i < PDBidList.size(); i++) {
+
+            byte[] predictedContainerBytes = (byte[]) session.createSQLQuery("SELECT predictedContainerByte FROM `protein` WHERE `PDBid`=:PDBid ").addScalar("predictedContainerByte", StandardBasicTypes.BINARY).setString("PDBid", PDBidList.get(i)).uniqueResult();
+
+            ProteinByte fetchedProtein = session.get(ProteinByte.class, PDBidList.get(i));
+
+            PredictedContainer fetchedpredictedContainer = (PredictedContainer) SerializationHelper.deserialize(predictedContainerBytes);
+
+            fetchedProtein.setPredictedContainer(fetchedpredictedContainer);
+
+            fetchedProteinList.add(fetchedProtein);
+
+        }
 
         ta.commit();
 
-        /*int size = fetchedProteinList.size();
-
-        List<Protein> ProteinList = new ArrayList<Protein>();
-
-        for (int i = 0; i < size; i++) {
-            Protein currentProt = fetchedProteinList.get(i);
-            PredictedContainer fetchedpredictedContainer = (PredictedContainer) SerializationHelper.deserialize(currentProt.getPredictedContainerByte());
-            Protein newProtein = new Protein(currentProt.getDoi(),currentProt.getPDBid(),currentProt.getChain(),fetchedpredictedContainer);
-            ProteinList.add(newProtein);
-        }
-*/
         return fetchedProteinList;
     }
 

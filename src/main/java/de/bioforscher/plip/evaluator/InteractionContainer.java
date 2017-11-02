@@ -1,9 +1,6 @@
 package de.bioforscher.plip.evaluator;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
@@ -11,6 +8,8 @@ import java.util.List;
  * --> is extendable for other interaction types
  */
 public class InteractionContainer implements Serializable{
+
+    private static final long serialVersionUID = 8995916421498263859L;
 
     private List<HBondInteraction> hBondInteractions;
     // more to come

@@ -1,8 +1,5 @@
 package de.bioforscher.plip.evaluator;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-
 import java.util.*;
 
 
@@ -11,11 +8,14 @@ public class Analyzer {
 
     /**
      * Code taken and modified from http://www.sanfoundry.com/java-program-implement-adjacency-list/
+     *
+     * for better handling as nested class
      * */
     class AdjacencyList {
 
         private Map<Integer, LinkedHashSet<Integer>> Adjacency_List;
 
+        //standard constructor
         public AdjacencyList(int number_of_vertices){
 
             Adjacency_List = new HashMap<>();
@@ -27,12 +27,12 @@ public class Analyzer {
             }
         }
 
-
+        //set connection
         public void setEdge(int source, int destination) {
 
             if (source > Adjacency_List.size() || destination > Adjacency_List.size() || destination == 0 || source == 0) {
 
-                System.out.println("set the vertex entered in not present ");
+                //System.out.println("set the vertex entered in not present ");
 
                 return;
             }
@@ -47,22 +47,23 @@ public class Analyzer {
 
         }
 
-
+        //get connection
         public LinkedHashSet<Integer> getEdge(int source) {
 
             if (source > Adjacency_List.size()) {
 
-                System.out.println("the vertex entered is not present");
+                //System.out.println("the vertex entered is not present");
 
                 return null;
             }
 
             return Adjacency_List.get(source);
         }
+
     }
 
 
-
+    //make the List and print it
     public AdjacencyList makeAdjacencyList(InteractionContainer interactionContainer){
         List<HBondInteraction> hBondInteractions = interactionContainer.gethBondInteractions();
 
@@ -82,15 +83,16 @@ public class Analyzer {
             adjacencyList.setEdge(hBondInteractions.get(i).getDonor(), hBondInteractions.get(i).getAccept());
         }
 
-//        for (int i = tempList.get(0); i <= number_of_vertices; i++) {
-//            System.out.print(i + ": ");
-//            System.out.println(adjacencyList.getEdge(i).toString());
-//        }
+        for (int i = 1; i <= number_of_vertices; i++) {
+            System.out.print(i + ": ");
+            System.out.println(adjacencyList.getEdge(i).toString());
+        }
 
         return adjacencyList;
 
     }
 
+    //finding exact matches for HBond interactions
     public List<HBondInteraction> findExactHBondMatches(PredictedContainer predictedContainer){
         List<HBondInteraction> matches = new ArrayList<>();
 

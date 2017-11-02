@@ -1,7 +1,6 @@
 package de.bioforscher.plip.evaluator.InsertionInterface;
 
 import de.bioforscher.plip.evaluator.*;
-//import de.bioforscher.plip.evaluator.Interaction;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -11,12 +10,15 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//import de.bioforscher.plip.evaluator.Interaction;
 //import org.apache.commons.lang3.StringUtils;
 
 
 
 public class Controller {
 
+    //define the variables
     @FXML TextField doi, PDBid, chain;
 
     @FXML TextField residueNumber, acceptor, donor, type;
@@ -25,7 +27,7 @@ public class Controller {
     @FXML TableColumn<HBondInteraction, Integer> resNumberCol, acceptorCol, donorCol;
     //@FXML TableColumn<HBondInteraction, String> interTypeCol;
 
-
+    //set the mapping for the TableView
     public void initialize(){
 
         resNumberCol.setCellValueFactory(new PropertyValueFactory<>("ResidueNumber"));
@@ -35,13 +37,10 @@ public class Controller {
     }
 
 
-    //TODO specify interaction types
-
+    //adding the interactions to the TableView
     @FXML
     protected void addInteractionToTable() {
-//        if (type.getText() == "H-Bond"){
-//            System.err.println("Type must be H-Bond, ::::::::::::::::::::::::::::::::::::");
-//        }
+
         if (StringUtils.isNumeric(residueNumber.getText()) == false || StringUtils.isNumeric(donor.getText()) == false || StringUtils.isNumeric(acceptor.getText()) == false){
             System.err.println("Residue Number, Donor and Acceptor must be numeric!");
         }
@@ -61,7 +60,7 @@ public class Controller {
         tableView.getItems().remove(tableView.getSelectionModel().getSelectedIndex());
     }
 
-
+    //getting all interactions from the View and storing them in the Database/ merging with existing protein; resetting the interface
     @FXML
     protected void SubmitButtonAction(){
 
@@ -85,7 +84,7 @@ public class Controller {
                 fetchedProtein.setDoi(doi.getText());
             }
             System.out.println("Storing protein..");
-            handler.storeProtein(fetchedProtein);
+            handler.mergeProtein(fetchedProtein);
 
             PDBid.setText("");
             doi.setText("");

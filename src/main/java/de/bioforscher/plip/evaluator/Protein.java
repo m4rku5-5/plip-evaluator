@@ -1,6 +1,8 @@
 package de.bioforscher.plip.evaluator;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
