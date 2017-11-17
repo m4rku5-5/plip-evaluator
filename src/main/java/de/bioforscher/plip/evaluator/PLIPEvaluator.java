@@ -3,8 +3,20 @@ package de.bioforscher.plip.evaluator;
 import com.sun.javafx.application.LauncherImpl;
 import de.bioforscher.plip.evaluator.InsertionInterface.InsertionInterface;
 import org.apache.commons.cli.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 
 
@@ -38,7 +50,8 @@ public class PLIPEvaluator {
                 OptionBuilder.withArgName("type")
                         .hasArg()
                         .withDescription("Analyze Protein with specified type; Valid <types> are: \n \t adj - make adjacency table for Protein interactions from PLIP and DSSP" +
-                                "                                                                 \n \t hbm - find exact HBond matches between PLIP and DSSP")
+                                "                                                                 \n \t hbm - find exact HBond matches between PLIP and DSSP" +
+                                "                                                                 \n \t plot - plots the interactions and writes it to a file")
                         .create("analyze"));
 
         options.addOption("json",false,"Exports all Proteins of the database as JSON file");
@@ -184,6 +197,79 @@ public class PLIPEvaluator {
                     }
                 } else {
                     System.out.println("No interactions present.");
+                }
+
+                break;
+
+            case "plot":
+
+                XYSeriesCollection xyData = new XYSeriesCollection();
+                XYSeries DSSPSeries = new XYSeries("DSSP");
+                XYSeries PLIPSeries = new XYSeries("PLIP");
+                XYSeries HBMSeries = new XYSeries("HBM");
+
+
+                for (int i = 0; i < protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().size(); i++) {
+                    if (protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().get(i).getAccept() != 0 &&  protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().get(i).getDonor() != 0)
+                    DSSPSeries.add(protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().get(i).getAccept(),
+                                     protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().get(i).getDonor());
+                }
+
+                for (int i = 0; i < protein.predictedContainer.getInteractionContainersPLIP().gethBondInteractions().size(); i++) {
+                    PLIPSeries.add(protein.predictedContainer.getInteractionContainersPLIP().gethBondInteractions().get(i).getAccept(),
+                            protein.predictedContainer.getInteractionContainersPLIP().gethBondInteractions().get(i).getDonor());
+                }
+
+                for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer()).size(); i++) {
+                    HBMSeries.add(analyzer.findExactHBondMatches(protein.getPredictedContainer()).get(i).getAccept(),
+                            analyzer.findExactHBondMatches(protein.getPredictedContainer()).get(i).getDonor());
+                }
+
+                xyData.addSeries(HBMSeries);
+                xyData.addSeries(DSSPSeries);
+                xyData.addSeries(PLIPSeries);
+
+
+                JFreeChart chart = ChartFactory.createScatterPlot(
+                        "Interactions", // chart title
+                        "Acceptor", // x axis label
+                        "Donor", // y axis label
+                        xyData, // data
+                        PlotOrientation.VERTICAL,
+                        true, // include legend
+                        true, // tooltips
+                        false // urls
+                );
+
+                Shape shape  = new Ellipse2D.Double(0,0,5,5);
+                chart.getXYPlot().getRenderer().setSeriesPaint(0, new Color(0,255,0));
+                chart.getXYPlot().getRenderer().setSeriesShape(0, shape);
+                chart.getXYPlot().getRenderer().setSeriesPaint(1, new Color(255,0,0));
+                chart.getXYPlot().getRenderer().setSeriesShape(1, shape);
+                chart.getXYPlot().getRenderer().setSeriesPaint(2, new Color(0,0,255));
+                chart.getXYPlot().getRenderer().setSeriesShape(2, shape);
+
+                //chart.getXYPlot().getRangeAxis().setAutoRange(true);
+                //chart.getXYPlot().getDomainAxis().setAutoRange(true);
+
+                // create and display a frame...
+                //ChartFrame frame = new ChartFrame("Interactions", chart);
+                //frame.pack();
+                //frame.setVisible(true);
+
+                OutputStream out = null;
+                try {
+                    out = new FileOutputStream("interactions_" + protein.getPDBid() + ".png");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    ChartUtilities.writeChartAsPNG(out,
+                            chart,
+                            1000,
+                            1000);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
                 break;

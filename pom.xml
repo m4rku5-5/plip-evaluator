@@ -44,6 +44,11 @@
             <artifactId>hibernate-c3p0</artifactId>
             <version>5.2.10.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.14</version>
+        </dependency>
     </dependencies>
 
     <build>
