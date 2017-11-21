@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * some 'container' to hold the predicted interactions
- * --> is extendable for other interaction types
+ * -- is extendable for other interaction types
  */
 public class InteractionContainer implements Serializable{
 
