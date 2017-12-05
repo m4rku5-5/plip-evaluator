@@ -36,32 +36,33 @@ class DSSP implements EvaluatorModule {
                 //get features
                 DSSPSecondaryStructure secondaryStructureDSSP = group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
 
-                //only HBond interactions
-                HBondInteraction interaction1 = new HBondInteraction();
+                String featureAnnotation = secondaryStructureDSSP.getSecondaryStructure().getOneLetterRepresentation();
+
+                int residueNumber = group.getResidueIdentifier().getResidueNumber();
+
+                //System.out.println(secondaryStructureDSSP);
 
 
+                //TODO offset?????
                 if (secondaryStructureDSSP.getAccept1().getPartner() != null){
-                    interaction1.setAccept(secondaryStructureDSSP.getAccept1().getPartner().getResidueIdentifier().getResidueNumber());
+                    HBondInteractionDSSPAnnotated interaction1 = new HBondInteractionDSSPAnnotated(residueNumber, secondaryStructureDSSP.getAccept1().getPartner().getResidueIdentifier().getResidueNumber()+1, residueNumber-1, featureAnnotation);
+                    hBondInteractions.add(interaction1);
                 }
-
-                if (secondaryStructureDSSP.getDonor1().getPartner() != null) {
-                    interaction1.setDonor(secondaryStructureDSSP.getDonor1().getPartner().getResidueIdentifier().getResidueNumber());
-                }
-
-
-                HBondInteraction interaction2 = new HBondInteraction();
 
                 if (secondaryStructureDSSP.getAccept2().getPartner() != null){
-                    interaction2.setAccept(secondaryStructureDSSP.getAccept2().getPartner().getResidueIdentifier().getResidueNumber());
+                    HBondInteractionDSSPAnnotated interaction2 = new HBondInteractionDSSPAnnotated(residueNumber, secondaryStructureDSSP.getAccept2().getPartner().getResidueIdentifier().getResidueNumber()+1, residueNumber-1, featureAnnotation);
+                    hBondInteractions.add(interaction2);
+                }
+
+                if (secondaryStructureDSSP.getDonor1().getPartner() != null){
+                    HBondInteractionDSSPAnnotated interaction3 = new HBondInteractionDSSPAnnotated(residueNumber, residueNumber+1, secondaryStructureDSSP.getDonor1().getPartner().getResidueIdentifier().getResidueNumber()-1, featureAnnotation);
+                    hBondInteractions.add(interaction3);
                 }
 
                 if (secondaryStructureDSSP.getDonor2().getPartner() != null){
-                    interaction2.setDonor(secondaryStructureDSSP.getDonor2().getPartner().getResidueIdentifier().getResidueNumber());
+                    HBondInteractionDSSPAnnotated interaction4 = new HBondInteractionDSSPAnnotated(residueNumber, residueNumber+1, secondaryStructureDSSP.getDonor2().getPartner().getResidueIdentifier().getResidueNumber()-1, featureAnnotation);
+                    hBondInteractions.add(interaction4);
                 }
-
-                //add interactions to list
-                hBondInteractions.add(interaction1);
-                hBondInteractions.add(interaction2);
 
             }
         }
@@ -71,7 +72,6 @@ class DSSP implements EvaluatorModule {
         interactionContainer.removeDuplicateHBonds();
 
         return interactionContainer;
-
-
     }
+
 }

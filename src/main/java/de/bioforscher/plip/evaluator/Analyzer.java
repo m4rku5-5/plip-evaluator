@@ -1,6 +1,9 @@
 package de.bioforscher.plip.evaluator;
 
+import javafx.util.Pair;
+
 import java.util.*;
+import java.util.concurrent.*;
 
 
 public class Analyzer {
@@ -93,7 +96,7 @@ public class Analyzer {
     }
 
     //finding exact matches for HBond interactions
-    public List<HBondInteraction> findExactHBondMatches(PredictedContainer predictedContainer){
+    public InteractionContainer findExactHBondMatches(PredictedContainer predictedContainer){
         List<HBondInteraction> matches = new ArrayList<>();
 
 
@@ -108,7 +111,50 @@ public class Analyzer {
             }
         }
 
-        return matches;
+        InteractionContainer exactHBondInteractions = new InteractionContainer(matches);
+        exactHBondInteractions.removeDuplicateHBonds();
+        return exactHBondInteractions;
     }
 
+
+    public Pair<InteractionContainer, List> findRangeHBondMatches(PredictedContainer predictedContainer){
+        List<HBondInteraction> matches = new ArrayList<>();
+
+
+        List<HBondInteraction> hBondInteractionDSSP = predictedContainer.getInteractionContainersDSSP().gethBondInteractions();
+        List<HBondInteraction> hBondInteractionPLIP = predictedContainer.getInteractionContainersPLIP().gethBondInteractions();
+
+        List<Double> distanceList = new ArrayList<>();
+
+        double range = Math.sqrt(8);
+        for (int i = 0; i < hBondInteractionPLIP.size(); i++) {
+            for (int j = 0; j < hBondInteractionDSSP.size(); j++) {
+                double d = 0;
+                d = Math.sqrt(Math.pow(hBondInteractionPLIP.get(i).getAccept()-hBondInteractionDSSP.get(j).getAccept(),2)+
+                              Math.pow(hBondInteractionPLIP.get(i).getDonor()-hBondInteractionDSSP.get(j).getDonor(),2));
+                if (d < range){
+                    matches.add(hBondInteractionPLIP.get(i));
+                    distanceList.add(d);
+                }
+            }
+        }
+
+        InteractionContainer rangeHBondInteractions = new InteractionContainer(matches);
+        rangeHBondInteractions.removeDuplicateHBonds();
+
+
+        Pair<InteractionContainer, List> containerDistancePair = new Pair<>(rangeHBondInteractions, distanceList);
+        return containerDistancePair;
+    }
+
+    /*public PredictedContainer annotateDSSPFeatures(PredictedContainer predictedContainer){
+
+        List<HBondInteraction> hBondInteractionDSSP = predictedContainer.getInteractionContainersDSSP().gethBondInteractions();
+        List<HBondInteraction> hBondInteractionPLIP = predictedContainer.getInteractionContainersPLIP().gethBondInteractions();
+
+
+
+
+        return ;
+    }*/
 }

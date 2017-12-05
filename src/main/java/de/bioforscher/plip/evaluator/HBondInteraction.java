@@ -52,7 +52,7 @@ public class HBondInteraction implements Serializable{
         this.accept = accept;
     }
 
-    //for comparing to interactions
+    //for comparing two interactions
     @Override
     public boolean equals(Object obj) {
         HBondInteraction hBondInteraction = (HBondInteraction) obj;

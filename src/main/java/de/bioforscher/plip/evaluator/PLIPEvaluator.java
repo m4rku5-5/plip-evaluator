@@ -13,11 +13,13 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -157,7 +159,7 @@ public class PLIPEvaluator {
         System.out.println("Analyzing protein....");
         Analyzer analyzer = new Analyzer();
 
-        System.out.println("Protein Id: " + protein.getPDBid());
+        System.out.println("Protein ID: " + protein.getPDBid());
         if (protein.getDoi() != null){
             System.out.println("DOI: " + protein.getDoi());
         } else {
@@ -165,20 +167,30 @@ public class PLIPEvaluator {
         }
 
         switch (type){
-            case "adj": System.out.println("\n Adjacency List for PLIP: ");
+            case "": break;
+
+            case "adj": System.out.println("\nAdjacency List for PLIP: ");
                 analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersPLIP());
-                System.out.println("\n Adjacency List for DSSP: ");
+                System.out.println("\nAdjacency List for DSSP: ");
                 analyzer.makeAdjacencyList(protein.getPredictedContainer().getInteractionContainersDSSP());
                 break;
 
-            case "hbm": System.out.println("\n Exact HBond matches between PLIP and DSSP: ");
+            case "hbm": System.out.println("\nExact HBond matches between PLIP and DSSP: ");
                 System.out.println("Res Acc Don");
-                for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer()).size(); i++) {
-                    System.out.println(analyzer.findExactHBondMatches(protein.getPredictedContainer()).get(i));
+                for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer()).gethBondInteractions().size(); i++) {
+                    System.out.println(analyzer.findExactHBondMatches(protein.getPredictedContainer()).gethBondInteractions().get(i));
                 }
                 break;
 
-            case "allint":  System.out.println("\n Printing all interactions:");
+            case "rhbm": System.out.println("\nHBond matches in range of 2 AA: ");
+                System.out.println("Res Acc Don Distance");
+                for (int i = 0; i < analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getKey().gethBondInteractions().size(); i++) {
+                    System.out.println(analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getKey().gethBondInteractions().get(i) + " " +
+                                       analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getValue().get(i));
+                }
+                break;
+
+            case "allint":  System.out.println("\nPrinting all interactions:");
                 System.out.println("DSSP: ");
                 System.out.println("Res Acc Don");
                 for (int i = 0; i < protein.predictedContainer.getInteractionContainersDSSP().gethBondInteractions().size(); i++) {
@@ -191,7 +203,7 @@ public class PLIPEvaluator {
                 }
                 System.out.println("\nLiterature: ");
                 System.out.println("Res Acc Don");
-                if (protein.predictedContainer.getInteractionContainersLiterature().gethBondInteractions() != null){
+                if (protein.predictedContainer.getInteractionContainersLiterature() != null){
                     for (int i = 0; i < protein.predictedContainer.getInteractionContainersLiterature().gethBondInteractions().size(); i++) {
                         System.out.println(protein.predictedContainer.getInteractionContainersLiterature().gethBondInteractions().get(i));
                     }
@@ -206,6 +218,7 @@ public class PLIPEvaluator {
                 XYSeriesCollection xyData = new XYSeriesCollection();
                 XYSeries DSSPSeries = new XYSeries("DSSP");
                 XYSeries PLIPSeries = new XYSeries("PLIP");
+                XYSeries RHBMSeries = new XYSeries("RHBM");
                 XYSeries HBMSeries = new XYSeries("HBM");
 
 
@@ -220,12 +233,23 @@ public class PLIPEvaluator {
                             protein.predictedContainer.getInteractionContainersPLIP().gethBondInteractions().get(i).getDonor());
                 }
 
-                for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer()).size(); i++) {
-                    HBMSeries.add(analyzer.findExactHBondMatches(protein.getPredictedContainer()).get(i).getAccept(),
-                            analyzer.findExactHBondMatches(protein.getPredictedContainer()).get(i).getDonor());
+                System.out.println("Finding exact HBond matches.....");
+                List<HBondInteraction> EHBM = analyzer.findExactHBondMatches(protein.getPredictedContainer()).gethBondInteractions();
+                for (int i = 0; i < EHBM.size(); i++) {
+                    HBMSeries.add(EHBM.get(i).getAccept(),
+                            EHBM.get(i).getDonor());
                 }
 
+                System.out.println("Finding range HBond matches.....");
+                List<HBondInteraction> RHBM = analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getKey().gethBondInteractions();
+                for (int i = 0; i < RHBM.size(); i++) {
+                    RHBMSeries.add(RHBM.get(i).getAccept(),
+                            RHBM.get(i).getDonor());
+                }
+
+                System.out.println("Plotting.....");
                 xyData.addSeries(HBMSeries);
+                xyData.addSeries(RHBMSeries);
                 xyData.addSeries(DSSPSeries);
                 xyData.addSeries(PLIPSeries);
 
@@ -242,17 +266,19 @@ public class PLIPEvaluator {
                 );
 
                 Shape shape  = new Ellipse2D.Double(0,0,5,5);
-                chart.getXYPlot().getRenderer().setSeriesPaint(0, new Color(0,255,0));
+                chart.getXYPlot().getRenderer().setSeriesPaint(0, new Color(0,0,0));
                 chart.getXYPlot().getRenderer().setSeriesShape(0, shape);
-                chart.getXYPlot().getRenderer().setSeriesPaint(1, new Color(255,0,0));
+                chart.getXYPlot().getRenderer().setSeriesPaint(1, new Color(0,255,0));
                 chart.getXYPlot().getRenderer().setSeriesShape(1, shape);
-                chart.getXYPlot().getRenderer().setSeriesPaint(2, new Color(0,0,255));
+                chart.getXYPlot().getRenderer().setSeriesPaint(2, new Color(255,0,0));
                 chart.getXYPlot().getRenderer().setSeriesShape(2, shape);
+                chart.getXYPlot().getRenderer().setSeriesPaint(3, new Color(0,0,255));
+                chart.getXYPlot().getRenderer().setSeriesShape(3, shape);
 
                 //chart.getXYPlot().getRangeAxis().setAutoRange(true);
                 //chart.getXYPlot().getDomainAxis().setAutoRange(true);
 
-                // create and display a frame...
+                //  create and display a frame...
                 //ChartFrame frame = new ChartFrame("Interactions", chart);
                 //frame.pack();
                 //frame.setVisible(true);
