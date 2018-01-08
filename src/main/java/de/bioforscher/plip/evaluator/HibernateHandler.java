@@ -81,7 +81,7 @@ public class HibernateHandler {
         Transaction ta = session.beginTransaction();
 
         //getting and deserializing the protein/predictedContainer --> not the fine english way because it's a workaround!
-        byte[] predictedContainerBytes = (byte[]) session.createSQLQuery("SELECT predictedContainerByte FROM `protein` WHERE `PDBid`=:PDBid ").addScalar("predictedContainerByte", StandardBasicTypes.BINARY).setString("PDBid", PDBid).uniqueResult();
+        byte[] predictedContainerBytes = (byte[]) session.createSQLQuery("SELECT predictedContainerByte FROM `Protein` WHERE `PDBid`=:PDBid ").addScalar("predictedContainerByte", StandardBasicTypes.BINARY).setString("PDBid", PDBid).uniqueResult();
 
         ProteinByte fetchedProtein = session.get(ProteinByte.class, PDBid);
 

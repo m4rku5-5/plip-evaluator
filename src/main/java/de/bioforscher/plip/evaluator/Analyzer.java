@@ -1,9 +1,10 @@
 package de.bioforscher.plip.evaluator;
 
 import javafx.util.Pair;
+import org.apache.commons.math3.util.Precision;
 
 import java.util.*;
-import java.util.concurrent.*;
+
 
 
 public class Analyzer {
@@ -63,6 +64,120 @@ public class Analyzer {
             return Adjacency_List.get(source);
         }
 
+    }
+
+    class Statistics {
+        int numberOfPLIPInt;
+        int numberOfDSSPInt;
+        int numberOfLitInt;
+        int numberOfHBM;
+        float percentOfHBM;
+        int numberOfRHBM;
+        float percentOfRHBM;
+        int totalScore;
+        float normTotalScore;
+
+        public Statistics(int numberOfPLIPInt, int numberOfDSSPInt, int numberOfLitInt, int numberOfHBM, float percentOfHBM, int numberOfRHBM, float percentOfRHBM, int totalScore, float normTotalScore) {
+            this.numberOfPLIPInt = numberOfPLIPInt;
+            this.numberOfDSSPInt = numberOfDSSPInt;
+            this.numberOfLitInt = numberOfLitInt;
+            this.numberOfHBM = numberOfHBM;
+            this.percentOfHBM = percentOfHBM;
+            this.numberOfRHBM = numberOfRHBM;
+            this.percentOfRHBM = percentOfRHBM;
+            this.totalScore = totalScore;
+            this.normTotalScore = normTotalScore;
+        }
+
+        public Statistics() {
+        }
+
+        public int getNumberOfPLIPInt() {
+            return numberOfPLIPInt;
+        }
+
+        public void setNumberOfPLIPInt(int numberOfPLIPInt) {
+            this.numberOfPLIPInt = numberOfPLIPInt;
+        }
+
+        public int getNumberOfDSSPInt() {
+            return numberOfDSSPInt;
+        }
+
+        public void setNumberOfDSSPInt(int numberOfDSSPInt) {
+            this.numberOfDSSPInt = numberOfDSSPInt;
+        }
+
+        public int getNumberOfLitInt() {
+            return numberOfLitInt;
+        }
+
+        public void setNumberOfLitInt(int numberOfLitInt) {
+            this.numberOfLitInt = numberOfLitInt;
+        }
+
+        public int getNumberOfHBM() {
+            return numberOfHBM;
+        }
+
+        public void setNumberOfHBM(int numberOfHBM) {
+            this.numberOfHBM = numberOfHBM;
+        }
+
+        public float getPercentOfHBM() {
+            return percentOfHBM;
+        }
+
+        public void setPercentOfHBM(int percentOfHBM) {
+            this.percentOfHBM = percentOfHBM;
+        }
+
+        public int getNumberOfRHBM() {
+            return numberOfRHBM;
+        }
+
+        public void setNumberOfRHBM(int numberOfRHBM) {
+            this.numberOfRHBM = numberOfRHBM;
+        }
+
+        public float getPercentOfRHBM() {
+            return percentOfRHBM;
+        }
+
+        public void setPercentOfRHBM(int percentOfRHBM) {
+            this.percentOfRHBM = percentOfRHBM;
+        }
+
+        public int getTotalScore() {
+            return totalScore;
+        }
+
+        public void setTotalScore(int totalScore) {
+            this.totalScore = totalScore;
+        }
+
+        public float getNormTotalScore() {
+            return normTotalScore;
+        }
+
+        public void setNormTotalScore(float normTotalScore) {
+            this.normTotalScore = normTotalScore;
+        }
+
+        @Override
+        public String toString() {
+
+            String out = "Number of PLIP interactions: " + this.numberOfPLIPInt +
+                         "\nNumber of DSSP interactions: " + this.numberOfDSSPInt +
+                         "\nNumber of Literature interactions: " + this.numberOfLitInt +
+                         "\nNumber of exact HBond matches: " + this.numberOfHBM +
+                         "\nPercentage of exact HBond matches: " + this.percentOfHBM +
+                         "\nNumber of range HBond matches: " + this.numberOfRHBM +
+                         "\nPercentage of range HBond matches: " + this.percentOfRHBM +
+                         "\nTotal Score: " + this.totalScore +
+                         "\nNormalized Total Score: " + this.normTotalScore;
+            return out;
+        }
     }
 
 
@@ -126,35 +241,74 @@ public class Analyzer {
 
         List<Double> distanceList = new ArrayList<>();
 
-        double range = Math.sqrt(8);
+        double range = Precision.round(Math.sqrt(8), 2);
         for (int i = 0; i < hBondInteractionPLIP.size(); i++) {
             for (int j = 0; j < hBondInteractionDSSP.size(); j++) {
                 double d = 0;
                 d = Math.sqrt(Math.pow(hBondInteractionPLIP.get(i).getAccept()-hBondInteractionDSSP.get(j).getAccept(),2)+
                               Math.pow(hBondInteractionPLIP.get(i).getDonor()-hBondInteractionDSSP.get(j).getDonor(),2));
-                if (d < range){
-                    matches.add(hBondInteractionPLIP.get(i));
-                    distanceList.add(d);
+                d = Precision.round(d, 2);
+                if (d < range && d != 0){
+                    for (int k = 0; k < matches.size(); k++) {
+                        if (!hBondInteractionPLIP.get(i).equals(matches.get(k))){
+                            if(distanceList.get(k) > d){
+                                matches.remove(k);
+                                distanceList.remove(k);
+                            }
+                            matches.add(hBondInteractionPLIP.get(i));
+                            distanceList.add(d);
+                        }
+                    }
                 }
             }
         }
 
         InteractionContainer rangeHBondInteractions = new InteractionContainer(matches);
-        rangeHBondInteractions.removeDuplicateHBonds();
 
 
         Pair<InteractionContainer, List> containerDistancePair = new Pair<>(rangeHBondInteractions, distanceList);
         return containerDistancePair;
     }
 
-    /*public PredictedContainer annotateDSSPFeatures(PredictedContainer predictedContainer){
+    public List<HBondInteractionDSSPAnnotated> annotateDSSPFeatures(List<HBondInteraction> hBondInteractions, Map<Integer, String> featureAnnotations){
 
-        List<HBondInteraction> hBondInteractionDSSP = predictedContainer.getInteractionContainersDSSP().gethBondInteractions();
-        List<HBondInteraction> hBondInteractionPLIP = predictedContainer.getInteractionContainersPLIP().gethBondInteractions();
+        List<HBondInteractionDSSPAnnotated> hBondInteractionDSSPAnnotated = new ArrayList<>();
+
+        for (HBondInteraction hbond : hBondInteractions) {
+            hBondInteractionDSSPAnnotated.add(new HBondInteractionDSSPAnnotated(hbond.getResidueNumber(), hbond.getDonor(), hbond.getAccept(), featureAnnotations.get(hbond.getResidueNumber())));
+        }
+
+        return hBondInteractionDSSPAnnotated;
+    }
+
+    public Statistics makeStatistics(PredictedContainer predictedContainer){
+
+        int numberOfPLIPInt = predictedContainer.getInteractionContainersPLIP().gethBondInteractions().size();
+        int numberOfHBM = findExactHBondMatches(predictedContainer).gethBondInteractions().size();
+        int numberOfRHBM = findRangeHBondMatches(predictedContainer).getKey().gethBondInteractions().size();
+
+        int numberOfLitInt = 0;
+        if (predictedContainer.getInteractionContainersLiterature() != null){
+            numberOfLitInt = predictedContainer.getInteractionContainersLiterature().gethBondInteractions().size();
+        }
+
+        int totalScore = 0;
+        float normTotalScore = 0;
 
 
 
+        Statistics statistics = new Statistics(
+                numberOfPLIPInt,
+                predictedContainer.getInteractionContainersDSSP().gethBondInteractions().size(),
+                numberOfLitInt,
+                numberOfHBM,
+                (numberOfHBM / numberOfPLIPInt) * 100,
+                numberOfRHBM,
+                (numberOfRHBM / numberOfPLIPInt) * 100,
+                totalScore,
+                normTotalScore
+        );
+        return statistics;
+    }
 
-        return ;
-    }*/
 }

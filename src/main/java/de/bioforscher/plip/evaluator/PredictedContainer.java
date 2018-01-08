@@ -9,14 +9,17 @@ public class PredictedContainer implements Serializable {
     private InteractionContainer interactionContainersDSSP;
     private InteractionContainer interactionContainersPLIP;
     private InteractionContainer interactionContainersLiterature;
+    private InteractionContainer interactionContainersHBPLUS;
 
-    public PredictedContainer(InteractionContainer interactionContainersDSSP, InteractionContainer interactionContainersPLIP, InteractionContainer interactionContainersLiterature) {
+    public PredictedContainer() {
+    }
+
+    public PredictedContainer(InteractionContainer interactionContainersDSSP, InteractionContainer interactionContainersPLIP, InteractionContainer interactionContainersLiterature, InteractionContainer interactionContainersHBPLUS) {
         this.interactionContainersDSSP = interactionContainersDSSP;
         this.interactionContainersPLIP = interactionContainersPLIP;
         this.interactionContainersLiterature = interactionContainersLiterature;
+        this.interactionContainersHBPLUS = interactionContainersHBPLUS;
     }
-
-    public PredictedContainer() {}
 
     public InteractionContainer getInteractionContainersDSSP() {
         return interactionContainersDSSP;
@@ -41,4 +44,13 @@ public class PredictedContainer implements Serializable {
     public void setInteractionContainersLiterature(InteractionContainer interactionContainersLiterature) {
         this.interactionContainersLiterature = interactionContainersLiterature;
     }
+
+    public InteractionContainer getInteractionContainersHBPLUS() {
+        return interactionContainersHBPLUS;
+    }
+
+    public void setInteractionContainersHBPLUS(InteractionContainer interactionContainersHBPLUS) {
+        this.interactionContainersHBPLUS = interactionContainersHBPLUS;
+    }
 }
+

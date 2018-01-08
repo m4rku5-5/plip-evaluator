@@ -10,7 +10,9 @@ import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * DSSP module under use of jstructure
@@ -36,8 +38,6 @@ class DSSP implements EvaluatorModule {
                 //get features
                 DSSPSecondaryStructure secondaryStructureDSSP = group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
 
-                String featureAnnotation = secondaryStructureDSSP.getSecondaryStructure().getOneLetterRepresentation();
-
                 int residueNumber = group.getResidueIdentifier().getResidueNumber();
 
                 //System.out.println(secondaryStructureDSSP);
@@ -45,22 +45,22 @@ class DSSP implements EvaluatorModule {
 
                 //TODO offset?????
                 if (secondaryStructureDSSP.getAccept1().getPartner() != null){
-                    HBondInteractionDSSPAnnotated interaction1 = new HBondInteractionDSSPAnnotated(residueNumber, secondaryStructureDSSP.getAccept1().getPartner().getResidueIdentifier().getResidueNumber()+1, residueNumber-1, featureAnnotation);
+                    HBondInteraction interaction1 = new HBondInteraction(residueNumber, secondaryStructureDSSP.getAccept1().getPartner().getResidueIdentifier().getResidueNumber()+1, residueNumber-1);
                     hBondInteractions.add(interaction1);
                 }
 
                 if (secondaryStructureDSSP.getAccept2().getPartner() != null){
-                    HBondInteractionDSSPAnnotated interaction2 = new HBondInteractionDSSPAnnotated(residueNumber, secondaryStructureDSSP.getAccept2().getPartner().getResidueIdentifier().getResidueNumber()+1, residueNumber-1, featureAnnotation);
+                    HBondInteraction interaction2 = new HBondInteraction(residueNumber, secondaryStructureDSSP.getAccept2().getPartner().getResidueIdentifier().getResidueNumber()+1, residueNumber-1);
                     hBondInteractions.add(interaction2);
                 }
 
                 if (secondaryStructureDSSP.getDonor1().getPartner() != null){
-                    HBondInteractionDSSPAnnotated interaction3 = new HBondInteractionDSSPAnnotated(residueNumber, residueNumber+1, secondaryStructureDSSP.getDonor1().getPartner().getResidueIdentifier().getResidueNumber()-1, featureAnnotation);
+                    HBondInteraction interaction3 = new HBondInteraction(residueNumber, residueNumber+1, secondaryStructureDSSP.getDonor1().getPartner().getResidueIdentifier().getResidueNumber()-1);
                     hBondInteractions.add(interaction3);
                 }
 
                 if (secondaryStructureDSSP.getDonor2().getPartner() != null){
-                    HBondInteractionDSSPAnnotated interaction4 = new HBondInteractionDSSPAnnotated(residueNumber, residueNumber+1, secondaryStructureDSSP.getDonor2().getPartner().getResidueIdentifier().getResidueNumber()-1, featureAnnotation);
+                    HBondInteraction interaction4 = new HBondInteraction(residueNumber, residueNumber+1, secondaryStructureDSSP.getDonor2().getPartner().getResidueIdentifier().getResidueNumber()-1);
                     hBondInteractions.add(interaction4);
                 }
 
@@ -73,5 +73,35 @@ class DSSP implements EvaluatorModule {
 
         return interactionContainer;
     }
+
+
+    public Map<Integer, String> getDSSPFeatureList(String PDBid){
+
+        Structure protein = StructureParser.source(PDBid).parse();
+        new DictionaryOfProteinSecondaryStructure().process(protein);
+
+        Map<Integer, String> featureMap = new HashMap<>();
+
+        //traverse over all amino acids
+        for(Chain chain : protein.getChains()) {
+            for (Group group : chain.getGroups()) {
+                if (!(group instanceof AminoAcid)) {
+                    continue;
+                }
+
+                //get features
+                DSSPSecondaryStructure secondaryStructureDSSP = group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
+
+                int residueNumber = group.getResidueIdentifier().getResidueNumber();
+                String featureAnnotation = secondaryStructureDSSP.getSecondaryStructure().getReducedRepresentation();
+
+                featureMap.put(residueNumber, featureAnnotation);
+            }
+        }
+
+        return featureMap;
+    }
+
+
 
 }

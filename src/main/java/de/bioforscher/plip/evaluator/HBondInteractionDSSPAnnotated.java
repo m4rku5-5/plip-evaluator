@@ -18,4 +18,10 @@ public class HBondInteractionDSSPAnnotated extends HBondInteraction{
     public void setFeature(String feature) {
         this.feature = feature;
     }
+
+    @Override
+    public String toString() {
+        String out = super.toString() + " " + this.getFeature();
+        return out;
+    }
 }
