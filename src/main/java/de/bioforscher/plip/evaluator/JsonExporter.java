@@ -43,4 +43,19 @@ public class JsonExporter {
 
     }
 
+    public void exportStatsAsJson(Analyzer.Statistics statistics, String pdbid){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        String str = gson.toJson(statistics);
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(pdbid + "_stats.json"));
+            writer.write(str);
+            writer.close();
+            System.out.println("Stats successfully written.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

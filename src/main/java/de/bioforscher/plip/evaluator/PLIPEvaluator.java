@@ -180,16 +180,29 @@ public class PLIPEvaluator {
 
             case "hbm": System.out.println("\nExact HBond matches between PLIP and DSSP: ");
                 System.out.println("Res Acc Don");
-                for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer()).gethBondInteractions().size(); i++) {
-                    System.out.println(analyzer.findExactHBondMatches(protein.getPredictedContainer()).gethBondInteractions().get(i));
+                for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).gethBondInteractions().size(); i++) {
+                    System.out.println(analyzer.findExactHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).gethBondInteractions().get(i));
+                }
+
+                System.out.println("\nExact HBond matches between PLIP and HBPLUS: ");
+                System.out.println("Res Acc Don");
+                for (int i = 0; i < analyzer.findExactHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersHBPLUS().gethBondInteractions()).gethBondInteractions().size(); i++) {
+                    System.out.println(analyzer.findExactHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersHBPLUS().gethBondInteractions()).gethBondInteractions().get(i));
                 }
                 break;
 
-            case "rhbm": System.out.println("\nHBond matches in range of 2 AA: ");
+            case "rhbm": System.out.println("\nHBond matches in range of 2 AA between PLIP and DSSP: ");
                 System.out.println("Res Acc Don Distance");
-                for (int i = 0; i < analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getKey().gethBondInteractions().size(); i++) {
-                    System.out.println(analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getKey().gethBondInteractions().get(i) + " " +
-                                       analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getValue().get(i));
+                for (int i = 0; i < analyzer.findRangeHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).getKey().gethBondInteractions().size(); i++) {
+                    System.out.println(analyzer.findRangeHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).getKey().gethBondInteractions().get(i) + " " +
+                                       analyzer.findRangeHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).getValue().get(i));
+                }
+
+                System.out.println("\nHBond matches in range of 2 AA between PLIP and HBPLUS: ");
+                System.out.println("Res Acc Don Distance");
+                for (int i = 0; i < analyzer.findRangeHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersHBPLUS().gethBondInteractions()).getKey().gethBondInteractions().size(); i++) {
+                    System.out.println(analyzer.findRangeHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersHBPLUS().gethBondInteractions()).getKey().gethBondInteractions().get(i) + " " +
+                            analyzer.findRangeHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersHBPLUS().gethBondInteractions()).getValue().get(i));
                 }
                 break;
 
@@ -242,14 +255,14 @@ public class PLIPEvaluator {
                 }
 
                 System.out.println("Finding exact HBond matches.....");
-                List<HBondInteraction> EHBM = analyzer.findExactHBondMatches(protein.getPredictedContainer()).gethBondInteractions();
+                List<HBondInteraction> EHBM = analyzer.findExactHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).gethBondInteractions();
                 for (int i = 0; i < EHBM.size(); i++) {
                     HBMSeries.add(EHBM.get(i).getAccept(),
                             EHBM.get(i).getDonor());
                 }
 
                 System.out.println("Finding range HBond matches.....");
-                List<HBondInteraction> RHBM = analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getKey().gethBondInteractions();
+                List<HBondInteraction> RHBM = analyzer.findRangeHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).getKey().gethBondInteractions();
                 for (int i = 0; i < RHBM.size(); i++) {
                     RHBMSeries.add(RHBM.get(i).getAccept(),
                             RHBM.get(i).getDonor());
@@ -310,8 +323,8 @@ public class PLIPEvaluator {
 
             case "plot.annotated":
 
-                EHBM = analyzer.findExactHBondMatches(protein.getPredictedContainer()).gethBondInteractions();
-                RHBM = analyzer.findRangeHBondMatches(protein.getPredictedContainer()).getKey().gethBondInteractions();
+                EHBM = analyzer.findExactHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).gethBondInteractions();
+                RHBM = analyzer.findRangeHBondMatches(protein.getPredictedContainer().getInteractionContainersPLIP().gethBondInteractions(), protein.getPredictedContainer().getInteractionContainersDSSP().gethBondInteractions()).getKey().gethBondInteractions();
 
                 Map<Integer, String> dsspFeatures = new DSSP().getDSSPFeatureList(protein.getPDBid());
 
@@ -325,6 +338,8 @@ public class PLIPEvaluator {
             case "stats":
 
                 System.out.println(analyzer.makeStatistics(protein.getPredictedContainer()));
+                JsonExporter jsonExporter = new JsonExporter();
+                jsonExporter.exportStatsAsJson(analyzer.makeStatistics(protein.getPredictedContainer()), protein.getPDBid());
 
                 break;
             default:

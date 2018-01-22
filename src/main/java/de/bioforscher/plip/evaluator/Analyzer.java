@@ -69,27 +69,41 @@ public class Analyzer {
     class Statistics {
         int numberOfPLIPInt;
         int numberOfDSSPInt;
+        int numberOfHBPLUSInt;
         int numberOfLitInt;
-        int numberOfHBM;
-        float percentOfHBM;
-        int numberOfRHBM;
-        float percentOfRHBM;
-        int totalScore;
-        float normTotalScore;
-
-        public Statistics(int numberOfPLIPInt, int numberOfDSSPInt, int numberOfLitInt, int numberOfHBM, float percentOfHBM, int numberOfRHBM, float percentOfRHBM, int totalScore, float normTotalScore) {
-            this.numberOfPLIPInt = numberOfPLIPInt;
-            this.numberOfDSSPInt = numberOfDSSPInt;
-            this.numberOfLitInt = numberOfLitInt;
-            this.numberOfHBM = numberOfHBM;
-            this.percentOfHBM = percentOfHBM;
-            this.numberOfRHBM = numberOfRHBM;
-            this.percentOfRHBM = percentOfRHBM;
-            this.totalScore = totalScore;
-            this.normTotalScore = normTotalScore;
-        }
+        int numberOfHBMPLIPDSSP;
+        int numberOfHBMPLIPHBPLUS;
+        float percentOfHBMPLIPDSSP;
+        float percentOfHBMPLIPHBPLUS;
+        int numberOfRHBMPLIPDSSP;
+        int numberOfRHBMPLIPHBPLUS;
+        float percentOfRHBMPLIPDSSP;
+        float percentOfRHBMPLIPHBPLUS;
+        int totalScorePLIPDSSP;
+        int totalScorePLIPHBPLUS;
+        float normTotalScorePLIPDSSP;
+        float normTotalScorePLIPHBPLUS;
 
         public Statistics() {
+        }
+
+        public Statistics(int numberOfPLIPInt, int numberOfDSSPInt, int numberOfHBPLUSInt, int numberOfLitInt, int numberOfHBMPLIPDSSP, int numberOfHBMPLIPHBPLUS, float percentOfHBMPLIPDSSP, float percentOfHBMPLIPHBPLUS, int numberOfRHBMPLIPDSSP, int numberOfRHBMPLIPHBPLUS, float percentOfRHBMPLIPDSSP, float percentOfRHBMPLIPHBPLUS, int totalScorePLIPDSSP, int totalScorePLIPHBPLUS, float normTotalScorePLIPDSSP, float normTotalScorePLIPHBPLUS) {
+            this.numberOfPLIPInt = numberOfPLIPInt;
+            this.numberOfDSSPInt = numberOfDSSPInt;
+            this.numberOfHBPLUSInt = numberOfHBPLUSInt;
+            this.numberOfLitInt = numberOfLitInt;
+            this.numberOfHBMPLIPDSSP = numberOfHBMPLIPDSSP;
+            this.numberOfHBMPLIPHBPLUS = numberOfHBMPLIPHBPLUS;
+            this.percentOfHBMPLIPDSSP = percentOfHBMPLIPDSSP;
+            this.percentOfHBMPLIPHBPLUS = percentOfHBMPLIPHBPLUS;
+            this.numberOfRHBMPLIPDSSP = numberOfRHBMPLIPDSSP;
+            this.numberOfRHBMPLIPHBPLUS = numberOfRHBMPLIPHBPLUS;
+            this.percentOfRHBMPLIPDSSP = percentOfRHBMPLIPDSSP;
+            this.percentOfRHBMPLIPHBPLUS = percentOfRHBMPLIPHBPLUS;
+            this.totalScorePLIPDSSP = totalScorePLIPDSSP;
+            this.totalScorePLIPHBPLUS = totalScorePLIPHBPLUS;
+            this.normTotalScorePLIPDSSP = normTotalScorePLIPDSSP;
+            this.normTotalScorePLIPHBPLUS = normTotalScorePLIPHBPLUS;
         }
 
         public int getNumberOfPLIPInt() {
@@ -108,6 +122,14 @@ public class Analyzer {
             this.numberOfDSSPInt = numberOfDSSPInt;
         }
 
+        public int getNumberOfHBPLUSInt() {
+            return numberOfHBPLUSInt;
+        }
+
+        public void setNumberOfHBPLUSInt(int numberOfHBPLUSInt) {
+            this.numberOfHBPLUSInt = numberOfHBPLUSInt;
+        }
+
         public int getNumberOfLitInt() {
             return numberOfLitInt;
         }
@@ -116,66 +138,121 @@ public class Analyzer {
             this.numberOfLitInt = numberOfLitInt;
         }
 
-        public int getNumberOfHBM() {
-            return numberOfHBM;
+        public int getNumberOfHBMPLIPDSSP() {
+            return numberOfHBMPLIPDSSP;
         }
 
-        public void setNumberOfHBM(int numberOfHBM) {
-            this.numberOfHBM = numberOfHBM;
+        public void setNumberOfHBMPLIPDSSP(int numberOfHBMPLIPDSSP) {
+            this.numberOfHBMPLIPDSSP = numberOfHBMPLIPDSSP;
         }
 
-        public float getPercentOfHBM() {
-            return percentOfHBM;
+        public int getNumberOfHBMPLIPHBPLUS() {
+            return numberOfHBMPLIPHBPLUS;
         }
 
-        public void setPercentOfHBM(int percentOfHBM) {
-            this.percentOfHBM = percentOfHBM;
+        public void setNumberOfHBMPLIPHBPLUS(int numberOfHBMPLIPHBPLUS) {
+            this.numberOfHBMPLIPHBPLUS = numberOfHBMPLIPHBPLUS;
         }
 
-        public int getNumberOfRHBM() {
-            return numberOfRHBM;
+        public float getPercentOfHBMPLIPDSSP() {
+            return percentOfHBMPLIPDSSP;
         }
 
-        public void setNumberOfRHBM(int numberOfRHBM) {
-            this.numberOfRHBM = numberOfRHBM;
+        public void setPercentOfHBMPLIPDSSP(float percentOfHBMPLIPDSSP) {
+            this.percentOfHBMPLIPDSSP = percentOfHBMPLIPDSSP;
         }
 
-        public float getPercentOfRHBM() {
-            return percentOfRHBM;
+        public float getPercentOfHBMPLIPHBPLUS() {
+            return percentOfHBMPLIPHBPLUS;
         }
 
-        public void setPercentOfRHBM(int percentOfRHBM) {
-            this.percentOfRHBM = percentOfRHBM;
+        public void setPercentOfHBMPLIPHBPLUS(float percentOfHBMPLIPHBPLUS) {
+            this.percentOfHBMPLIPHBPLUS = percentOfHBMPLIPHBPLUS;
         }
 
-        public int getTotalScore() {
-            return totalScore;
+        public int getNumberOfRHBMPLIPDSSP() {
+            return numberOfRHBMPLIPDSSP;
         }
 
-        public void setTotalScore(int totalScore) {
-            this.totalScore = totalScore;
+        public void setNumberOfRHBMPLIPDSSP(int numberOfRHBMPLIPDSSP) {
+            this.numberOfRHBMPLIPDSSP = numberOfRHBMPLIPDSSP;
         }
 
-        public float getNormTotalScore() {
-            return normTotalScore;
+        public int getNumberOfRHBMPLIPHBPLUS() {
+            return numberOfRHBMPLIPHBPLUS;
         }
 
-        public void setNormTotalScore(float normTotalScore) {
-            this.normTotalScore = normTotalScore;
+        public void setNumberOfRHBMPLIPHBPLUS(int numberOfRHBMPLIPHBPLUS) {
+            this.numberOfRHBMPLIPHBPLUS = numberOfRHBMPLIPHBPLUS;
+        }
+
+        public float getPercentOfRHBMPLIPDSSP() {
+            return percentOfRHBMPLIPDSSP;
+        }
+
+        public void setPercentOfRHBMPLIPDSSP(float percentOfRHBMPLIPDSSP) {
+            this.percentOfRHBMPLIPDSSP = percentOfRHBMPLIPDSSP;
+        }
+
+        public float getPercentOfRHBMPLIPHBPLUS() {
+            return percentOfRHBMPLIPHBPLUS;
+        }
+
+        public void setPercentOfRHBMPLIPHBPLUS(float percentOfRHBMPLIPHBPLUS) {
+            this.percentOfRHBMPLIPHBPLUS = percentOfRHBMPLIPHBPLUS;
+        }
+
+        public int getTotalScorePLIPDSSP() {
+            return totalScorePLIPDSSP;
+        }
+
+        public void setTotalScorePLIPDSSP(int totalScorePLIPDSSP) {
+            this.totalScorePLIPDSSP = totalScorePLIPDSSP;
+        }
+
+        public int getTotalScorePLIPHBPLUS() {
+            return totalScorePLIPHBPLUS;
+        }
+
+        public void setTotalScorePLIPHBPLUS(int totalScorePLIPHBPLUS) {
+            this.totalScorePLIPHBPLUS = totalScorePLIPHBPLUS;
+        }
+
+        public float getNormTotalScorePLIPDSSP() {
+            return normTotalScorePLIPDSSP;
+        }
+
+        public void setNormTotalScorePLIPDSSP(float normTotalScorePLIPDSSP) {
+            this.normTotalScorePLIPDSSP = normTotalScorePLIPDSSP;
+        }
+
+        public float getNormTotalScorePLIPHBPLUS() {
+            return normTotalScorePLIPHBPLUS;
+        }
+
+        public void setNormTotalScorePLIPHBPLUS(float normTotalScorePLIPHBPLUS) {
+            this.normTotalScorePLIPHBPLUS = normTotalScorePLIPHBPLUS;
         }
 
         @Override
         public String toString() {
 
-            String out = "Number of PLIP interactions: " + this.numberOfPLIPInt +
+            String out = "\nNumber of PLIP interactions: " + this.numberOfPLIPInt +
                          "\nNumber of DSSP interactions: " + this.numberOfDSSPInt +
+                         "\nNumber of HBPLUS interactions: " + this.numberOfHBPLUSInt +
                          "\nNumber of Literature interactions: " + this.numberOfLitInt +
-                         "\nNumber of exact HBond matches: " + this.numberOfHBM +
-                         "\nPercentage of exact HBond matches: " + this.percentOfHBM +
-                         "\nNumber of range HBond matches: " + this.numberOfRHBM +
-                         "\nPercentage of range HBond matches: " + this.percentOfRHBM +
-                         "\nTotal Score: " + this.totalScore +
-                         "\nNormalized Total Score: " + this.normTotalScore;
+                         "\n\nNumber of exact HBond matches (PLIP-DSSP): " + this.numberOfHBMPLIPDSSP +
+                         "\nPercentage of exact HBond matches (PLIP-DSSP): " + this.percentOfHBMPLIPDSSP + "%" +
+                         "\nNumber of exact HBond matches (PLIP-HBPLUS): " + this.numberOfHBMPLIPHBPLUS +
+                         "\nPercentage of exact HBond matches (PLIP-HBPLUS): " + this.percentOfHBMPLIPHBPLUS + "%" +
+                         "\n\nNumber of range HBond matches (PLIP-DSSP): " + this.numberOfRHBMPLIPDSSP +
+                         "\nPercentage of range HBond matches (PLIP-DSSP): " + this.percentOfRHBMPLIPDSSP + "%" +
+                         "\nNumber of range HBond matches (PLIP-HBPLUS): " + this.numberOfRHBMPLIPHBPLUS +
+                         "\nPercentage of range HBond matches (PLIP-HBPLUS): " + this.percentOfRHBMPLIPHBPLUS + "%" +
+                         "\n\nTotal Score (PLIP-DSSP): " + this.totalScorePLIPDSSP +
+                         "\nTotal Score (PLIP-HBPLUS): " + this.totalScorePLIPHBPLUS +
+                         "\nNormalized Total Score (PLIP-DSSP): " + this.normTotalScorePLIPDSSP +
+                         "\nNormalized Total Score (PLIP-HBPLUS): " + this.normTotalScorePLIPHBPLUS;
             return out;
         }
     }
@@ -211,16 +288,13 @@ public class Analyzer {
     }
 
     //finding exact matches for HBond interactions
-    public InteractionContainer findExactHBondMatches(PredictedContainer predictedContainer){
+    public InteractionContainer findExactHBondMatches(List<HBondInteraction> hBondInteractionPLIP, List<HBondInteraction> hBondInteraction2){
         List<HBondInteraction> matches = new ArrayList<>();
 
 
-        List<HBondInteraction> hBondInteractionDSSP = predictedContainer.getInteractionContainersDSSP().gethBondInteractions();
-        List<HBondInteraction> hBondInteractionPLIP = predictedContainer.getInteractionContainersPLIP().gethBondInteractions();
-
         for (int i = 0; i < hBondInteractionPLIP.size(); i++) {
-            for (int j = 0; j < hBondInteractionDSSP.size(); j++) {
-                if (hBondInteractionPLIP.get(i).getAccept() == hBondInteractionDSSP.get(j).getAccept() && hBondInteractionPLIP.get(i).getDonor() == hBondInteractionDSSP.get(j).getDonor()){
+            for (int j = 0; j < hBondInteraction2.size(); j++) {
+                if (hBondInteractionPLIP.get(i).getAccept() == hBondInteraction2.get(j).getAccept() && hBondInteractionPLIP.get(i).getDonor() == hBondInteraction2.get(j).getDonor()){
                     matches.add(hBondInteractionPLIP.get(i));
                 }
             }
@@ -232,41 +306,53 @@ public class Analyzer {
     }
 
 
-    public Pair<InteractionContainer, List> findRangeHBondMatches(PredictedContainer predictedContainer){
+    public Pair<InteractionContainer, List> findRangeHBondMatches(List<HBondInteraction> hBondInteractionPLIP, List<HBondInteraction> hBondInteraction2){
         List<HBondInteraction> matches = new ArrayList<>();
 
-
-        List<HBondInteraction> hBondInteractionDSSP = predictedContainer.getInteractionContainersDSSP().gethBondInteractions();
-        List<HBondInteraction> hBondInteractionPLIP = predictedContainer.getInteractionContainersPLIP().gethBondInteractions();
 
         List<Double> distanceList = new ArrayList<>();
 
         double range = Precision.round(Math.sqrt(8), 2);
         for (int i = 0; i < hBondInteractionPLIP.size(); i++) {
-            for (int j = 0; j < hBondInteractionDSSP.size(); j++) {
+            for (int j = 0; j < hBondInteraction2.size(); j++) {
                 double d = 0;
-                d = Math.sqrt(Math.pow(hBondInteractionPLIP.get(i).getAccept()-hBondInteractionDSSP.get(j).getAccept(),2)+
-                              Math.pow(hBondInteractionPLIP.get(i).getDonor()-hBondInteractionDSSP.get(j).getDonor(),2));
+                d = Math.sqrt(Math.pow(hBondInteractionPLIP.get(i).getAccept()-hBondInteraction2.get(j).getAccept(),2)+
+                              Math.pow(hBondInteractionPLIP.get(i).getDonor()-hBondInteraction2.get(j).getDonor(),2));
                 d = Precision.round(d, 2);
-                if (d < range && d != 0){
-                    for (int k = 0; k < matches.size(); k++) {
-                        if (!hBondInteractionPLIP.get(i).equals(matches.get(k))){
-                            if(distanceList.get(k) > d){
-                                matches.remove(k);
-                                distanceList.remove(k);
-                            }
-                            matches.add(hBondInteractionPLIP.get(i));
-                            distanceList.add(d);
-                        }
-                    }
+
+                if (d < range){
+                   matches.add(hBondInteractionPLIP.get(i));
+                   distanceList.add(d);
+
                 }
             }
         }
 
-        InteractionContainer rangeHBondInteractions = new InteractionContainer(matches);
+        //List cleanup
+        List<HBondInteraction> uniquematches = new ArrayList<>(matches);
+        InteractionContainer tempContainer = new InteractionContainer(uniquematches);
+        tempContainer.removeDuplicateHBonds();
+        tempContainer.removeDuplicateHBonds();
+        TreeMap<Double, HBondInteraction> tempmap = new TreeMap<>();
+        List<Double> distanceListCleaned = new ArrayList<>();
+        List<HBondInteraction> matchesCleaned = new ArrayList<>();
 
 
-        Pair<InteractionContainer, List> containerDistancePair = new Pair<>(rangeHBondInteractions, distanceList);
+        for (int i = 0; i < uniquematches.size(); i++) {
+            for (int j = 0; j < matches.size(); j++) {
+                if (uniquematches.get(i).equals(matches.get(j))){
+                    tempmap.put(distanceList.get(j), matches.get(j));
+                }
+            }
+            matchesCleaned.add(tempmap.firstEntry().getValue());
+            distanceListCleaned.add(tempmap.firstEntry().getKey());
+            tempmap.clear();
+        }
+
+        InteractionContainer rangeHBondInteractions = new InteractionContainer(matchesCleaned);
+
+
+        Pair<InteractionContainer, List> containerDistancePair = new Pair<>(rangeHBondInteractions, distanceListCleaned);
         return containerDistancePair;
     }
 
@@ -284,29 +370,70 @@ public class Analyzer {
     public Statistics makeStatistics(PredictedContainer predictedContainer){
 
         int numberOfPLIPInt = predictedContainer.getInteractionContainersPLIP().gethBondInteractions().size();
-        int numberOfHBM = findExactHBondMatches(predictedContainer).gethBondInteractions().size();
-        int numberOfRHBM = findRangeHBondMatches(predictedContainer).getKey().gethBondInteractions().size();
+        int numberOfHBMPLIPDSSP = findExactHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersDSSP().gethBondInteractions()).gethBondInteractions().size();
+        int numberOfRHBMPLIPDSSP = findRangeHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersDSSP().gethBondInteractions()).getKey().gethBondInteractions().size();
+        int numberOfHBMPLIPHBPLUS = findExactHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersHBPLUS().gethBondInteractions()).gethBondInteractions().size();
+        int numberOfRHBMPLIPHBPLUS = findRangeHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersHBPLUS().gethBondInteractions()).getKey().gethBondInteractions().size();
+
+
 
         int numberOfLitInt = 0;
         if (predictedContainer.getInteractionContainersLiterature() != null){
             numberOfLitInt = predictedContainer.getInteractionContainersLiterature().gethBondInteractions().size();
         }
 
-        int totalScore = 0;
-        float normTotalScore = 0;
+        float percentOfHBMPLIPDSSP = Precision.round( ((float) numberOfHBMPLIPDSSP / numberOfPLIPInt) * 100, 2);
+        float percentOfRHBMPLIPDSSP = Precision.round ( ((float) numberOfRHBMPLIPDSSP / numberOfPLIPInt) * 100, 2);
+        float percentOfHBMPLIPHBPLUS = Precision.round( ((float) numberOfHBMPLIPHBPLUS / numberOfPLIPInt) * 100, 2);
+        float percentOfRHBMPLIPHBPLUS = Precision.round ( ((float) numberOfRHBMPLIPHBPLUS / numberOfPLIPInt) * 100, 2);
 
+
+        //Scoring
+        int totalScorePLIPDSSP = 0;
+        int totalScorePLIPHBPLUS = 0;
+
+        //wins and costs
+        int costHBM = 5;
+        int costRHBM1And14 = 2;
+        int costRHBM22 = 1;
+        int costMM = -1;
+
+
+        totalScorePLIPDSSP = totalScorePLIPDSSP + (numberOfHBMPLIPDSSP * costHBM);
+        totalScorePLIPDSSP = totalScorePLIPDSSP + (Collections.frequency(findRangeHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersDSSP().gethBondInteractions()).getValue(), 1.0) * costRHBM1And14) +
+                                  (Collections.frequency(findRangeHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersDSSP().gethBondInteractions()).getValue(), 1.41) * costRHBM1And14);
+        totalScorePLIPDSSP = totalScorePLIPDSSP + (Collections.frequency(findRangeHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersDSSP().gethBondInteractions()).getValue(), 2.24) * costRHBM22);
+        totalScorePLIPDSSP = totalScorePLIPDSSP + ((numberOfPLIPInt - numberOfHBMPLIPDSSP - numberOfRHBMPLIPDSSP) * costMM);
+
+        totalScorePLIPHBPLUS = totalScorePLIPHBPLUS + (numberOfHBMPLIPHBPLUS * costHBM);
+        totalScorePLIPHBPLUS = totalScorePLIPHBPLUS + (Collections.frequency(findRangeHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersHBPLUS().gethBondInteractions()).getValue(), 1.0) * costRHBM1And14) +
+                (Collections.frequency(findRangeHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersHBPLUS().gethBondInteractions()).getValue(), 1.41) * costRHBM1And14);
+        totalScorePLIPHBPLUS = totalScorePLIPHBPLUS + (Collections.frequency(findRangeHBondMatches(predictedContainer.getInteractionContainersPLIP().gethBondInteractions(), predictedContainer.getInteractionContainersHBPLUS().gethBondInteractions()).getValue(), 2.24) * costRHBM22);
+        totalScorePLIPHBPLUS = totalScorePLIPHBPLUS + ((numberOfPLIPInt - numberOfHBMPLIPHBPLUS - numberOfRHBMPLIPHBPLUS) * costMM);
+
+
+
+        float normTotalScorePLIPDSSP = Precision.round((float) totalScorePLIPDSSP / numberOfPLIPInt, 4);
+        float normTotalScorePLIPHBPLUS = Precision.round((float) totalScorePLIPHBPLUS / numberOfPLIPInt, 4);
 
 
         Statistics statistics = new Statistics(
                 numberOfPLIPInt,
                 predictedContainer.getInteractionContainersDSSP().gethBondInteractions().size(),
+                predictedContainer.getInteractionContainersHBPLUS().gethBondInteractions().size(),
                 numberOfLitInt,
-                numberOfHBM,
-                (numberOfHBM / numberOfPLIPInt) * 100,
-                numberOfRHBM,
-                (numberOfRHBM / numberOfPLIPInt) * 100,
-                totalScore,
-                normTotalScore
+                numberOfHBMPLIPDSSP,
+                numberOfHBMPLIPHBPLUS,
+                percentOfHBMPLIPDSSP,
+                percentOfHBMPLIPHBPLUS,
+                numberOfRHBMPLIPDSSP,
+                numberOfRHBMPLIPHBPLUS,
+                percentOfRHBMPLIPDSSP,
+                percentOfRHBMPLIPHBPLUS,
+                totalScorePLIPDSSP,
+                totalScorePLIPHBPLUS,
+                normTotalScorePLIPDSSP,
+                normTotalScorePLIPHBPLUS
         );
         return statistics;
     }
