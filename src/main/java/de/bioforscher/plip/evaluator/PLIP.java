@@ -1,8 +1,7 @@
 package de.bioforscher.plip.evaluator;
 
 
-import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
-import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.interactions.*;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -22,7 +21,7 @@ class PLIP implements EvaluatorModule {
 
         //make new structure and process with DSSP
         Structure protein = StructureParser.source(PDBid).parse();
-        new PLIPAnnotator().process(protein);
+        new PLIPIntraMolecularAnnotator().process(protein);
 
         List<HBondInteraction> hBondInteractions = new ArrayList<HBondInteraction>();
 
@@ -33,7 +32,7 @@ class PLIP implements EvaluatorModule {
                     continue;
                 }
 
-                PLIPInteractionContainer plipInteractionContainer = group.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
+                PLIPInteractionContainer plipInteractionContainer = group.getFeature(PLIPInteractionContainer.class);
 
                 if(!plipInteractionContainer.getHydrogenBonds().isEmpty()){
                     for (int i = 0; i < plipInteractionContainer.getHydrogenBonds().size(); i++) {

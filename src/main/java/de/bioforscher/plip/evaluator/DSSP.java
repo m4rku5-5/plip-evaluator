@@ -36,7 +36,7 @@ class DSSP implements EvaluatorModule {
                 }
 
                 //get features
-                DSSPSecondaryStructure secondaryStructureDSSP = group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
+                DSSPSecondaryStructure secondaryStructureDSSP = group.getFeature(DSSPSecondaryStructure.class);
 
                 int residueNumber = group.getResidueIdentifier().getResidueNumber();
 
@@ -90,7 +90,7 @@ class DSSP implements EvaluatorModule {
                 }
 
                 //get features
-                DSSPSecondaryStructure secondaryStructureDSSP = group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
+                DSSPSecondaryStructure secondaryStructureDSSP = group.getFeature(DSSPSecondaryStructure.class);
 
                 int residueNumber = group.getResidueIdentifier().getResidueNumber();
                 String featureAnnotation = secondaryStructureDSSP.getSecondaryStructure().getReducedRepresentation();

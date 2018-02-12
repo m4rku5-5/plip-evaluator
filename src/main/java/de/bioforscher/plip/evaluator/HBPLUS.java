@@ -28,7 +28,12 @@ public class HBPLUS implements EvaluatorModule{
 
         try {
             Process p = Runtime.getRuntime().exec("hbplus.exe " + PDBid + "_cleaned.pdb");
-            p.waitFor();
+            System.out.println("Say hello to HBPLUS:");
+            String line;
+            Reader r = new InputStreamReader(p.getInputStream());
+            BufferedReader in = new BufferedReader(r);
+            while((line = in.readLine()) != null) System.out.println(line);
+            in.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
